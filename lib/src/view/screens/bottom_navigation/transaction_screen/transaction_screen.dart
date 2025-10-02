@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:consumer_app/src/controller/transaction_controller/transaction_controller.dart';
+import 'package:consumer_app/src/core/constants/app_colors.dart';
 import 'package:consumer_app/src/model/transaction_model/transaction_model.dart';
 import 'package:consumer_app/src/routes/route_names.dart';
 import 'package:consumer_app/src/view/components/common_components/title_text.dart';
@@ -128,7 +129,8 @@ class TransactionScreen extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 10),
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: Get.theme.colorScheme.surface,
+          // color: Get.theme.colorScheme.surface,
+          gradient: AppColors.successGradient,
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(

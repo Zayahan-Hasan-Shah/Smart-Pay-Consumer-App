@@ -15,7 +15,6 @@ class SettingScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          // Sexy Gradient Header
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),

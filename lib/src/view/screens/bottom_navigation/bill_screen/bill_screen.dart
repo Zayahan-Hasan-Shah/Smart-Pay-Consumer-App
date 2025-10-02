@@ -162,11 +162,7 @@ class BillScreen extends StatelessWidget {
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
-          gradient: LinearGradient(
-            colors: [AppColors.white, Colors.grey.shade100],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          gradient: AppColors.successGradient,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.06),
