@@ -7,8 +7,8 @@ class AppColors {
   static const Color grey = Colors.grey;
 
   // Brand Colors
-  static const Color primaryColor = Color(0xff448f44); 
-  static const Color secondaryColor = Color(0xff2575fc); 
+  static const Color primaryColor = Color(0xff448f44);
+  static const Color secondaryColor = Color(0xff2575fc);
   static const Color backgroundColor = Color(0xfff7f7f7);
 
   // Status Colors
@@ -54,14 +54,17 @@ class AppColors {
   );
 
   static const LinearGradient neutralGradient = LinearGradient(
-    colors: [Color(0xffe5e7eb), Color(0xff9ca3af)]  ,
+    colors: [Color(0xffe5e7eb), Color(0xff9ca3af)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
-
   //=====================================================================================
 
   static const authButtonBakgroundColor = Color(0xFF3A93E6);
-
+  static const whiteBackgroundColor = Colors.white;
+  static const appBarTitleTextColor = Color(0xFF171a1f);
+  static const appBarBottomBorderColor = Colors.grey;
+  static const dashboardCardBackGroundColor = Color(0xFFF2F7FD);
+  static const recentTransactionBackgroundColor = Color(0xFFfafafb);
 }
