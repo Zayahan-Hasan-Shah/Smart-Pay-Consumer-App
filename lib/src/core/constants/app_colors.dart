@@ -7,8 +7,8 @@ class AppColors {
   static const Color grey = Colors.grey;
 
   // Brand Colors
-  static const Color primaryColor = Color(0xff448f44); // your green brand
-  static const Color secondaryColor = Color(0xff2575fc); // cool blue
+  static const Color primaryColor = Color(0xff448f44); 
+  static const Color secondaryColor = Color(0xff2575fc); 
   static const Color backgroundColor = Color(0xfff7f7f7);
 
   // Status Colors
@@ -58,4 +58,10 @@ class AppColors {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
+
+
+  //=====================================================================================
+
+  static const authButtonBakgroundColor = Color(0xFF3A93E6);
+
 }

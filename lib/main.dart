@@ -1,5 +1,7 @@
 import 'package:consumer_app/src/routes/app_routes.dart';
+import 'package:consumer_app/src/routes/route_names.dart';
 import 'package:consumer_app/src/view/screens/auth/login_screen.dart';
+import 'package:consumer_app/src/view/screens/on_boarding/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'src/core/constants/app_colors.dart';
@@ -88,11 +90,13 @@ class MyApp extends StatelessWidget {
       return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         getPages: AppRoutes.routes,
+        initialRoute: RouteNames.splashScreen,
         title: 'Consumer App',
         theme: lightTheme,
         darkTheme: darkTheme,
         themeMode: themeController.theme,
-        home: LoginScreen(),
+        home: SplashScreen(),
+        // home: LoginScreen(),
       );
     });
   }

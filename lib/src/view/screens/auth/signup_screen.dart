@@ -98,6 +98,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                             0.3,
                                       ),
                                     ),
+                                    headingText(
+                                      "Join Smart Pay for seamless financial management.",
+                                      fontSize: 20,
+                                      isCenter: true,
+                                    ),
                                     AppSize.vrtSpace(10),
                                     // user name
                                     headingText("User Name"),
@@ -129,9 +134,10 @@ class _SignupScreenState extends State<SignupScreen> {
                                     AppSize.vrtSpace(4),
                                     phoneNoTextField(),
                                     AppSize.vrtSpace(8),
-                                    _loginRouteBuild(),
+
                                     AppSize.vrtSpace(10),
                                     signupButton(),
+                                    _loginRouteBuild(),
                                   ],
                                 ),
                               ),
@@ -150,45 +156,62 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  Widget headingText(String text) {
-    return TitleText(title: text, fontSize: 18, color: Colors.black,);
+  Widget headingText(
+    String text, {
+    bool isCenter = false,
+    double? fontSize = 18,
+  }) {
+    return TitleText(
+      title: text,
+      fontSize: fontSize ?? 18,
+      color: Colors.black,
+      textAlign: isCenter ? TextAlign.center : null,
+    );
   }
 
   CustomTextField userTextField() {
     return CustomTextField(
+      prefixIcon: Icon(Icons.person_outline_outlined),
       controller: userNameController,
       validator: validator,
-      hintText: "User name",
+      hintText: "Enter your username",
       hintColor: Colors.black,
+      isUnderLine: false,
     );
   }
 
   CustomTextField emailTextField() {
     return CustomTextField(
+      prefixIcon: Icon(Icons.mail_outline_outlined),
       controller: emailController,
       validator: validator,
       hintText: "Email",
       hintColor: Colors.black,
+      isUnderLine: false,
     );
   }
 
   CustomTextField cnicTextField() {
     return CustomTextField(
+      prefixIcon: Icon(Icons.qr_code_scanner_outlined),
       controller: cnicController,
       validator: validator,
       hintText: "CNIC",
       keyboardType: TextInputType.phone,
       hintColor: Colors.black,
+      isUnderLine: false,
     );
   }
 
   CustomTextField passTextField() {
     return CustomTextField(
+      prefixIcon: Icon(Icons.lock_outline),
       controller: passwordController,
       validator: validator,
       hintText: "Password",
       hintColor: Colors.black,
       obsText: signupController.isPasswordHidden.value,
+      isUnderLine: false,
       suffixIcon: IconButton(
         icon: Icon(
           signupController.isPasswordHidden.value
@@ -204,8 +227,10 @@ class _SignupScreenState extends State<SignupScreen> {
 
   CustomTextField confPassTextField() {
     return CustomTextField(
+      prefixIcon: Icon(Icons.lock_outline),
       controller: confirmPasswordController,
       hintColor: Colors.black,
+      isUnderLine: false,
       validator: (value) =>
           confirmPasswordValidator(value, passwordController.text),
       hintText: "Confirm Password",
@@ -225,17 +250,19 @@ class _SignupScreenState extends State<SignupScreen> {
 
   CustomTextField phoneNoTextField() {
     return CustomTextField(
+      prefixIcon: Icon(Icons.phone_enabled_outlined),
       controller: phoneNumberController,
       validator: validator,
       hintText: "Phone Number",
       keyboardType: TextInputType.phone,
       hintColor: Colors.black,
+      isUnderLine: false,
     );
   }
 
   Widget _loginRouteBuild() {
     return Align(
-      alignment: Alignment.centerRight,
+      alignment: Alignment.center,
       child: TextButton(
         onPressed: () {
           Get.offAllNamed(RouteNames.loginScreen);
@@ -243,6 +270,7 @@ class _SignupScreenState extends State<SignupScreen> {
         child: TitleText(
           title: 'Already have an account? Login',
           color: AppColors.black,
+          fontSize: 16,
         ),
       ),
     );
@@ -252,6 +280,8 @@ class _SignupScreenState extends State<SignupScreen> {
     return Obx(
       () => Center(
         child: FractionallyElevatedButton(
+          widthFactor: 1,
+          backgroundColor: AppColors.authButtonBakgroundColor,
           onTap: () async {
             if (_formKey.currentState!.validate()) {
               var result = await signupController.signup(

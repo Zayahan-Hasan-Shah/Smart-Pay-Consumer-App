@@ -12,6 +12,7 @@ class CustomTextField extends StatelessWidget {
   final bool isUnderLine;
   final Color? hintColor;
   final double? fontSize;
+  final Icon? prefixIcon;
 
   const CustomTextField({
     Key? key,
@@ -25,6 +26,7 @@ class CustomTextField extends StatelessWidget {
     this.isUnderLine = true,
     this.hintColor,
     this.fontSize,
+    this.prefixIcon,
   }) : super(key: key);
 
   @override
@@ -39,9 +41,9 @@ class CustomTextField extends StatelessWidget {
         hintText: hintText,
         hintStyle: TextStyle(color: hintColor, fontSize: fontSize),
         focusedBorder: isUnderLine
-            ? const UnderlineInputBorder()
+            ? UnderlineInputBorder()
             : OutlineInputBorder(
-                borderSide: const BorderSide(color: AppColors.white),
+                borderSide: const BorderSide(color: Colors.grey),
                 borderRadius: BorderRadius.circular(8),
               ),
         enabledBorder: isUnderLine
@@ -52,7 +54,9 @@ class CustomTextField extends StatelessWidget {
                 borderSide: const BorderSide(color: Colors.grey),
                 borderRadius: BorderRadius.circular(8),
               ),
-        suffixIcon: suffixIcon ??
+        prefixIcon: prefixIcon ?? null,              
+        suffixIcon:
+            suffixIcon ??
             (toggle != null
                 ? IconButton(
                     icon: Icon(

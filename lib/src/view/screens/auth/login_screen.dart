@@ -73,8 +73,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
+                              Center(
+                                child: Image.asset(
+                                  AppAssets.logoImage,
+                                  width:
+                                      MediaQuery.of(context).size.height * 0.3,
+                                ),
+                              ),
+                              headingText(
+                                "Welcome",
+                                fontSize: 30,
+                                isCenter: true,
+                              ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 16,
@@ -83,15 +95,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Center(
-                                      child: Image.asset(
-                                        AppAssets.logoImage,
-                                        width:
-                                            MediaQuery.of(context).size.height *
-                                            0.3,
-                                      ),
-                                    ),
                                     AppSize.vrtSpace(10),
+
                                     // email
                                     headingText("Email"),
                                     AppSize.vrtSpace(4),
@@ -122,25 +127,38 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget headingText(String text) {
-    return TitleText(title: text, fontSize: 18, color: Colors.black,);
+  Widget headingText(
+    String text, {
+    bool isCenter = false,
+    double? fontSize = 18,
+  }) {
+    return TitleText(
+      title: text,
+      fontSize: fontSize ?? 18,
+      color: Colors.black,
+      textAlign: isCenter ? TextAlign.center : null,
+    );
   }
 
   CustomTextField emailTextField() {
     return CustomTextField(
+      isUnderLine: false,
+      prefixIcon: Icon(Icons.mail_outline_outlined),
       controller: emailController,
       validator: validator,
       hintText: "Email",
-      hintColor: Colors.black ,
+      hintColor: Colors.black,
     );
   }
 
   CustomTextField passTextField() {
     return CustomTextField(
       controller: passwordController,
+      prefixIcon: Icon(Icons.lock_outline),
+      isUnderLine: false,
       validator: validator,
       hintText: "Password",
-      hintColor: Colors.black ,
+      hintColor: Colors.black,
       obsText: loginController.isPasswordHidden.value,
       suffixIcon: IconButton(
         icon: Icon(
@@ -157,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _signupRouteBuild() {
     return Align(
-      alignment: Alignment.centerRight,
+      alignment: Alignment.center,
       child: TextButton(
         onPressed: () {
           Get.offAllNamed(RouteNames.signupScreen);
@@ -165,6 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: TitleText(
           title: 'Don\'t have an account? Signup',
           color: AppColors.black,
+          fontSize: 16,
         ),
       ),
     );
@@ -174,6 +193,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Obx(
       () => Center(
         child: FractionallyElevatedButton(
+          widthFactor: 1,
+          backgroundColor: AppColors.authButtonBakgroundColor,
           onTap: () async {
             if (_formKey.currentState!.validate()) {
               var result = await loginController.login(

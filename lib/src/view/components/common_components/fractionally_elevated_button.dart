@@ -22,7 +22,7 @@ class FractionallyElevatedButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor ?? AppColors.primaryColor,
           elevation: 0,
-          side: const BorderSide(color: AppColors.black),
+          side: const BorderSide(color: AppColors.black,),
           visualDensity: const VisualDensity(vertical: 2, horizontal: 2),
         ),
         onPressed: onTap,
