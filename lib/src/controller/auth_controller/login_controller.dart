@@ -1,5 +1,6 @@
 import 'package:consumer_app/src/model/user_model/user_model.dart';
 import 'package:consumer_app/src/service/auth_service/login_service.dart';
+import 'package:consumer_app/src/service/storage_service/storage_services.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
@@ -12,11 +13,13 @@ class LoginController extends GetxController {
 
   Future<UserModel?> login(String email, String password) async {
     try {
+      final StorageServices _storage = StorageServices();
       isLoading.value = true;
       UserModel? response = await LoginService().login(email, password);
       if (response != null) {
         currentUser.value = response;
         isLoading.value = false;
+        isLoading.value=true;
         return response;
       }
       isLoading.value = false;

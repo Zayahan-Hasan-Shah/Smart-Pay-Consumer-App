@@ -41,8 +41,16 @@ class LoginService {
           name: "Zayahan",
           email: "zayahan@gmail.com",
           phoneNumber: "923327699137",
-          consumerNumber: "60054250180883267"
         );
+      } else {
+        Get.snackbar(
+          "Login Error",
+          "Invalid Credentials",
+          colorText: Colors.white,
+          backgroundColor: Colors.redAccent,
+          snackPosition: SnackPosition.BOTTOM,
+        ); // explicitly return null
+        return null;
       }
       // var response = await APIService.login(api: '', body: bodySent);
 
@@ -66,6 +74,7 @@ class LoginService {
       // );
     } catch (e) {
       log("LOGIN SERVICE ERROR : $e");
+      return null;
     }
   }
 }

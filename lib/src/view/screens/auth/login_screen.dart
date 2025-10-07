@@ -5,6 +5,7 @@ import 'package:consumer_app/src/core/constants/app_assets.dart';
 import 'package:consumer_app/src/core/constants/app_colors.dart';
 import 'package:consumer_app/src/core/validation/app_validation.dart';
 import 'package:consumer_app/src/routes/route_names.dart';
+import 'package:consumer_app/src/service/storage_service/storage_services.dart';
 import 'package:consumer_app/src/view/components/common_components/app_size_component.dart';
 import 'package:consumer_app/src/view/components/common_components/custom_text_field.dart';
 import 'package:consumer_app/src/view/components/common_components/fractionally_elevated_button.dart';
@@ -26,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordController = TextEditingController();
 
   final loginController = Get.put(LoginController());
+  final StorageServices storage = Get.put(StorageServices());
 
   @override
   void dispose() {
@@ -201,10 +203,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 emailController.text.trim(),
                 passwordController.text.trim(),
               );
-              log("RESULT : $result");
+              log("RESULT  BEFORE IF: $result");
               if (result != null) {
-                log("RESULT : $result");
-                // String value = signupController;
+                log("RESULT AFTER IF : $result");
+
                 Get.offNamed(RouteNames.landingPageScreen);
               }
             }
