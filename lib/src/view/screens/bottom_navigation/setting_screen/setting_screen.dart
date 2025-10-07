@@ -97,7 +97,7 @@ class SettingScreen extends StatelessWidget {
                     subtitle: Text(
                       themeController.isDarkMode.value
                           ? "Turn off to use light theme"
-                          : "Turn on to go dark & sexy 🌙",
+                          : "Turn on to use dark theme",
                       style: theme.textTheme.bodyMedium,
                     ),
                   ),

@@ -40,6 +40,21 @@ class ConsumerService {
 
   Future<List<ConsumerModel>?> getConsumerNumbrOfUser(int userId) async {
     try {
+      if (userId == 1) {
+        Get.snackbar(
+          "Successfull",
+          "Consumer Number Fetched",
+          colorText: AppColors.white,
+          backgroundColor: AppColors.primaryColor,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return [
+          ConsumerModel(consumerNumberId: 1, number: "6005425018088321"),
+          ConsumerModel(consumerNumberId: 2, number: "6005425018088322"),
+          ConsumerModel(consumerNumberId: 3, number: "6005425018088323"),
+          ConsumerModel(consumerNumberId: 4, number: "6005425018088324"),
+        ];
+      }
       Get.snackbar(
         "Error",
         "Failed to Fetch Consumer Number",

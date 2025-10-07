@@ -12,7 +12,9 @@ class BillController extends GetxController {
     try {
       isLoading.value = true;
       final fetchedBills = await _service.fetchBillsByConsumer(consumerNumber);
-      bills.value = fetchedBills;
+      if (fetchedBills != null) {
+        bills.assignAll(fetchedBills);
+      }
     } catch (e) {
       Get.snackbar("Error", "Failed to fetch bills: $e");
     } finally {

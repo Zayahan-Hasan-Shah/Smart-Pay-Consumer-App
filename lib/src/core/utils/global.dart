@@ -1,5 +1,6 @@
 import 'package:consumer_app/src/core/constants/app_colors.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 String formatNumber(int number) {
   List<String> suffixes = ['', 'K', 'M', 'B', 'T'];
@@ -19,7 +20,6 @@ String formatNumber(int number) {
   return '$formattedString${suffixes[suffixIndex]}';
 }
 
-
 BoxDecoration get customMainCardDecoration {
   return BoxDecoration(
     boxShadow: [
@@ -32,4 +32,18 @@ BoxDecoration get customMainCardDecoration {
     ],
     color: AppColors.white,
   );
+}
+
+String formatDate(DateTime date) {
+  final DateFormat formatter = DateFormat('dd MMM, yyyy');
+  return formatter.format(date);
+}
+
+String formatAmountPKR(num amount) {
+  final formatter = NumberFormat.currency(
+    locale: 'ur_PK', // Locale for Pakistan
+    symbol: 'Rs.', // Currency symbol
+    decimalDigits: 2,
+  );
+  return formatter.format(amount);
 }
