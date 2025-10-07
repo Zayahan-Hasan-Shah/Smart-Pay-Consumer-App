@@ -38,7 +38,7 @@ class SignupService {
         "cnic": cnic,
       };
       // TODO: Replace with actual API usage/handling
-      final response = await APIService.post(api: ApiUrl.signup, body: bodySent);
+      final response = await APIService.post(api: ApiUrl.signupUrl, body: bodySent);
       if (name == "zayahan" &&
           email == "zayahan@gmail.com" &&
           password == "123qwe" &&

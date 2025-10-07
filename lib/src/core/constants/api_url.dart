@@ -1,9 +1,7 @@
 class ApiUrl {
-  ApiUrl._();
-
-  // TODO: Replace placeholders with real endpoints
-  static const String baseUrl = "https://example.com/api";
-  static const String signup = "$baseUrl/signup";
-  static const String login = "$baseUrl/login";
+  static const String baseUrl = 'http://192.168.100.154:5020';
+  static const String signupUrl = '$baseUrl/api/signup';
+  static const String loginUrl = '$baseUrl/api/logn';
+  
 }
 

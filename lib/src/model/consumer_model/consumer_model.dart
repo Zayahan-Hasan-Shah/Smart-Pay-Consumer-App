@@ -1,4 +1,5 @@
 class ConsumerModel {
-  String consumerNumber;
-  ConsumerModel({required this.consumerNumber});
+  int consumerNumberId;
+  String number;
+  ConsumerModel({required this.consumerNumberId, required this.number});
 }

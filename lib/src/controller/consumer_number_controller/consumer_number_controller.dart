@@ -14,7 +14,8 @@ class ConsumerNumberController extends GetxController {
       final userMap = user_info != null ? jsonDecode(user_info) : null;
 
       isLoading.value = true;
-      dynamic response = await ConsumerService().createConsumerNumber(userMap?['id'],
+      dynamic response = await ConsumerService().createConsumerNumber(
+        userMap?['id'],
         consumerNumber,
       );
       if (response != null) {
@@ -28,16 +29,17 @@ class ConsumerNumberController extends GetxController {
     }
   }
 
-  Future<List<ConsumerModel>>? getConsumerNumbrOfUser() {
+  Future<List<ConsumerModel>?> getConsumerNumbrOfUser(String id) async {
     try {
       isLoading.value = true;
-      var response = ConsumerService().getConsumerNumbrOfUser();
-      if(response != null){
+      final user_info = await StorageServices().read("user_info");
+      final userMap = user_info != null ? jsonDecode(user_info) : null;
+      var response = await ConsumerService().getConsumerNumbrOfUser(userMap);
+      if (response != null) {
         isLoading.value = false;
-        return null;
-        // return response.body;
+
+        return response;
       }
-      return null;
     } catch (e) {
       isLoading.value = false;
       return null;

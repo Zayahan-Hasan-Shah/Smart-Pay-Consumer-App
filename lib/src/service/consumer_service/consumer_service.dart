@@ -9,29 +9,21 @@ import 'package:get/get.dart';
 class ConsumerService {
   Future<String?> createConsumerNumber(int id, String cNo) async {
     try {
-      // var bodySent = {"userId": id, "consumerNuber": cNo};
-      // var response = await APIService.post(api: "", body: bodySent);
-      if (cNo == "60054250180883267") {
-        Get.snackbar(
-          "Successfull",
-          "Consumer Number Registered",
-          colorText: AppColors.white,
-          backgroundColor: AppColors.primaryColor,
-          snackPosition: SnackPosition.BOTTOM,
-        );
+      var bodySent = {"userId": id, "consumerNumber": cNo};
+      var response = await APIService.post(api: "", body: bodySent);
+
+      if (response != null) {
+        if (response.statusCode == 200) {
+          Get.snackbar(
+            "Successfull",
+            "Consumer Number Registered",
+            colorText: AppColors.white,
+            backgroundColor: AppColors.primaryColor,
+            snackPosition: SnackPosition.BOTTOM,
+          );
+          return response.body;
+        }
       }
-      // if (response != null) {
-      //   if (response.statusCode == 200) {
-      //     Get.snackbar(
-      //       "Successfull",
-      //       "Consumer Number Registered",
-      //       colorText: AppColors.white,
-      //       backgroundColor: AppColors.primaryColor,
-      //       snackPosition: SnackPosition.BOTTOM,
-      //     );
-      //     return response.body;
-      //   }
-      // }
       Get.snackbar(
         "Error",
         "Consumer Number Didn't Registered",
@@ -46,7 +38,7 @@ class ConsumerService {
     }
   }
 
-  Future<List<ConsumerModel>?> getConsumerNumbrOfUser() async {
+  Future<List<ConsumerModel>?> getConsumerNumbrOfUser(int userId) async {
     try {
       Get.snackbar(
         "Error",

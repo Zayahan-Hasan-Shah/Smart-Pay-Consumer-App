@@ -4,6 +4,7 @@ import 'package:consumer_app/src/controller/bill_controller/bill_controller.dart
 import 'package:consumer_app/src/controller/consumer_number_controller/consumer_number_controller.dart';
 import 'package:consumer_app/src/core/constants/app_colors.dart';
 import 'package:consumer_app/src/view/components/common_components/custom_appbar.dart';
+import 'package:consumer_app/src/view/components/common_components/custom_dropdown.dart';
 import 'package:consumer_app/src/view/components/common_components/custom_text_field.dart';
 import 'package:consumer_app/src/view/components/common_components/fractionally_elevated_button.dart';
 import 'package:consumer_app/src/view/components/common_components/title_text.dart';
@@ -23,6 +24,7 @@ class _BillScreenState extends State<BillScreen> {
   final cNController = TextEditingController();
   final consumerController = Get.put(ConsumerNumberController());
   final controller = Get.put(BillController());
+  String? selectedConsumerNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,13 @@ class _BillScreenState extends State<BillScreen> {
         padding: EdgeInsets.all(2.h),
         child: Form(
           key: _formKey,
-          child: Column(children: [_customField(), registerConsumerNumber()]),
+          child: Column(
+            children: [
+              _customField(),
+              registerConsumerNumber(),
+              _buildDropDown(),
+            ],
+          ),
         ),
       ),
     );
@@ -78,6 +86,16 @@ class _BillScreenState extends State<BillScreen> {
                 ),
         ),
       ),
+    );
+  }
+
+  Widget _buildDropDown() {
+    return CustomDropdown(
+      items: [],
+      hint: "Select Consumer Number",
+      onChanged: (value) {
+        setState(() {});
+      },
     );
   }
 }
