@@ -22,6 +22,33 @@ class TransactionService {
         senderAccountName: "Zayahan",
         receiverAccountName: "HBL Loan",
       ),
+      TransactionModel(
+        transactionId: "TXN67891",
+        amount: 120000,
+        date: DateTime.now().subtract(const Duration(days: 3)),
+        time: "04:33 PM",
+        type: "Bank Transfer",
+        senderAccountName: "Zayahan",
+        receiverAccountName: "Okasha",
+      ),
+      TransactionModel(
+        transactionId: "TXN67892",
+        amount: 93000,
+        date: DateTime.now().subtract(const Duration(days: 3)),
+        time: "01:30 AM",
+        type: "B2B",
+        senderAccountName: "Zayahan",
+        receiverAccountName: "Zia",
+      ),
+      TransactionModel(
+        transactionId: "TXN67893",
+        amount: 42400,
+        date: DateTime.now().subtract(const Duration(days: 3)),
+        time: "17:30 PM",
+        type: "P2P",
+        senderAccountName: "Zayahan",
+        receiverAccountName: "GAMINGZONE",
+      ),
     ];
   }
 }

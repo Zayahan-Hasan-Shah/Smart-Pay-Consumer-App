@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:consumer_app/src/core/utils/global.dart';
 import 'package:consumer_app/src/model/transaction_model/transaction_model.dart';
+import 'package:consumer_app/src/view/components/common_components/custom_appbar.dart';
 import 'package:consumer_app/src/view/components/common_components/title_text.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:pdf/pdf.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
 import 'package:consumer_app/src/core/constants/app_colors.dart';
+import 'package:sizer/sizer.dart';
 
 class TransactionDetailScreen extends StatelessWidget {
   const TransactionDetailScreen({super.key});
@@ -85,16 +88,17 @@ class TransactionDetailScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text("Transaction Detail"),
-        backgroundColor: AppColors.primaryColor,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.download, color: Colors.white),
-            onPressed: () => _downloadPDF(txn),
-          ),
-        ],
-      ),
+      appBar: CustomAppbar(title: txn.transactionId, isnotify: false, isback: true,),
+      // appBar: AppBar(
+      //   title: const Text("Transaction Detail"),
+      //   backgroundColor: AppColors.primaryColor,
+      //   actions: [
+      //     IconButton(
+      //       icon: const Icon(Icons.download, color: Colors.white),
+      //       onPressed: () => _downloadPDF(txn),
+      //     ),
+      //   ],
+      // ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
@@ -112,60 +116,41 @@ class TransactionDetailScreen extends StatelessWidget {
                 ),
               ],
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Sexy Gradient Header
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [AppColors.primaryColor, AppColors.secondaryColor],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(14),
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                spacing: 1.h,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Info Tiles
+                  // transaction id
+                  _infoTile(
+                    Icons.fingerprint_outlined,
+                    "Transaction ID",
+                    txn.transactionId,
                   ),
-                  child: Text(
-                    "Transaction ID: ${txn.transactionId}",
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                  // transaction date and time
+                  _infoTile(
+                    Icons.calendar_today,
+                    "Time & Date",
+                    "${txn.time} - ${formatDate(txn.date)}",
                   ),
-                ),
-                const SizedBox(height: 20),
-
-                // Amount Highlight
-                Center(
-                  child: Text(
-                    "Rs ${txn.amount}",
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: txn.amount > 0 ? AppColors.success : AppColors.danger,
-                    ),
+                  _infoTile(
+                    Icons.payments_outlined,
+                    "Amount",
+                    formatAmountPKR(txn.amount).toString(),
                   ),
-                ),
-                const SizedBox(height: 20),
-
-                // Info Tiles
-                _infoTile(
-                  Icons.calendar_today,
-                  "Date",
-                  "${txn.date.day}/${txn.date.month}/${txn.date.year}",
-                ),
-                _infoTile(Icons.access_time, "Time", txn.time),
-                _infoTile(Icons.payment, "Type", txn.type),
-                _infoTile(Icons.person, "Sender", txn.senderAccountName),
-                _infoTile(
-                  Icons.account_circle,
-                  "Receiver",
-                  txn.receiverAccountName,
-                ),
-              ],
+                  // chanel time
+                  _infoTile(Icons.payment, "Chanel", txn.type),
+                  _infoTile(Icons.person, "Sender", txn.senderAccountName),
+                  _infoTile(
+                    Icons.account_circle,
+                    "Receiver",
+                    txn.receiverAccountName,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -184,7 +169,7 @@ class TransactionDetailScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.primaryColor, size: 40,),
+          Icon(icon, color: AppColors.authButtonBakgroundColor, size: 40),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
