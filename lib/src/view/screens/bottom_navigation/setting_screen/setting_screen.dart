@@ -1,8 +1,11 @@
 import 'package:consumer_app/src/controller/theme_controller/theme_controller.dart';
 import 'package:consumer_app/src/core/constants/app_colors.dart';
 import 'package:consumer_app/src/routes/route_names.dart';
+import 'package:consumer_app/src/view/components/common_components/custom_appbar.dart';
+import 'package:consumer_app/src/view/components/common_components/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
@@ -13,50 +16,9 @@ class SettingScreen extends StatelessWidget {
 
     final theme = Theme.of(context);
     return Scaffold(
+      appBar: CustomAppbar(title: "Settings", isnotify: false),
       body: Column(
         children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-            decoration: const BoxDecoration(
-              gradient: AppColors.primaryGradient,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-              ),
-            ),
-            child: Row(
-              children: [
-                const CircleAvatar(
-                  radius: 35,
-                  backgroundImage: NetworkImage(
-                    "https://i.ibb.co/5M0QZVB/avatar.png",
-                  ), // placeholder
-                ),
-                const SizedBox(width: 15),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Hey, Zayahan 👋",
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.white,
-                      ),
-                    ),
-                    const Text(
-                      "Manage your preferences",
-                      style: TextStyle(color: Colors.white70),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 20),
-
           // Settings List
           Expanded(
             child: ListView(
@@ -88,12 +50,17 @@ class SettingScreen extends StatelessWidget {
                     onChanged: (value) => themeController.toggleTheme(),
                     secondary: Icon(
                       Icons.dark_mode,
-                      color: theme.colorScheme.primary,
+                      color: const Color.fromARGB(255, 19, 37, 53), // theme.colorScheme.primary,
                     ),
-                    title: Text(
-                      "Dark Mode",
-                      style: theme.textTheme.titleMedium,
+                    title: TitleText(
+                      title: "Dark Mode",
+                      fontSize: 17.sp,
+                      weight: FontWeight.w600,
                     ),
+                    // title: Text(
+                    //   "Dark Mode",
+                    //   style: theme.textTheme.titleMedium,
+                    // ),
                     subtitle: Text(
                       themeController.isDarkMode.value
                           ? "Turn off to use light theme"
@@ -145,17 +112,24 @@ class SettingScreen extends StatelessWidget {
       elevation: 3,
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: Theme.of(
-            Get.context!,
-          ).colorScheme.primary.withOpacity(0.1),
-          child: Icon(icon, color: Theme.of(Get.context!).colorScheme.primary),
+          backgroundColor: AppColors.authButtonBakgroundColor.withOpacity(0.1),
+          // backgroundColor: Theme.of(
+          //   Get.context!,
+          // ).colorScheme.primary.withOpacity(0.1),
+          child: Icon(
+            icon,
+            color: AppColors.authButtonBakgroundColor,
+          ), // Theme.of(Get.context!).colorScheme.primary),
         ),
-        title: Text(
-          title,
-          style: Theme.of(Get.context!).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
+        title: TitleText(
+          title: title,
+          fontSize: 17.sp,
+          weight: FontWeight.w600,
+                  // style: Theme.of(Get.context!).textTheme.titleMedium?.copyWith(
+          //   fontWeight: FontWeight.bold,
+          //   fontSize: 16,
+          
+      
         ),
         subtitle: Text(
           subtitle,
