@@ -1,5 +1,6 @@
 import 'package:consumer_app/src/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -13,6 +14,7 @@ class CustomTextField extends StatelessWidget {
   final Color? hintColor;
   final double? fontSize;
   final Icon? prefixIcon;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextField({
     Key? key,
@@ -27,6 +29,7 @@ class CustomTextField extends StatelessWidget {
     this.hintColor,
     this.fontSize,
     this.prefixIcon,
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -37,6 +40,7 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       obscureText: obsText,
       validator: validator,
+      inputFormatters: inputFormatters,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: TextStyle(color: hintColor, fontSize: fontSize),
@@ -54,7 +58,7 @@ class CustomTextField extends StatelessWidget {
                 borderSide: const BorderSide(color: Colors.grey),
                 borderRadius: BorderRadius.circular(8),
               ),
-        prefixIcon: prefixIcon ?? null,              
+        prefixIcon: prefixIcon ?? null,
         suffixIcon:
             suffixIcon ??
             (toggle != null

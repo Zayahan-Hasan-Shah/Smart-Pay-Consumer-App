@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:consumer_app/src/core/constants/app_colors.dart';
 import 'package:consumer_app/src/model/auth_model/signup_model.dart';
 import 'package:consumer_app/src/core/constants/api_url.dart';
 import 'package:consumer_app/src/service/common_service/api_service.dart';
@@ -35,40 +37,30 @@ class SignupService {
         "email": email,
         "password": sendPassword.toString(),
         "phoneNumber": phoneNumber,
-        "cnic": cnic,
+        "cnicNumber": cnic,
       };
-      // TODO: Replace with actual API usage/handling
-      final response = await APIService.post(api: ApiUrl.signupUrl, body: bodySent);
-      if (name == "zayahan" &&
-          email == "zayahan@gmail.com" &&
-          password == "123qwe" &&
-          phoneNumber == "923327699137" &&
-          cnic == "4250180883267") {
+      final response = await APIService.signup(
+        api: ApiUrl.signupUrl,
+        body: bodySent,
+      );
+
+      if (response != null) {
+        final decoded = jsonDecode(response);
+        final signupModel = SignupModel.fromJson(decoded);
+        // Fallback success if API returns something truthy (mock)
         Get.snackbar(
-          "Signup Successfully",
-          "Welcome",
+          "Signup Successfull",
+          "Congratulations",
           colorText: Colors.white,
-          backgroundColor: Colors.green,
+          backgroundColor: AppColors.success,
           snackPosition: SnackPosition.BOTTOM,
         );
-        return SignupModel(
-          name: name,
-          email: email,
-          password: password,
-          phoneNumber: phoneNumber,
-          cnic: cnic,
-        );
+        return signupModel;
       }
-      if (response != null) {
-        // Fallback success if API returns something truthy (mock)
-        return SignupModel(
-          name: name,
-          email: email,
-          password: password,
-          phoneNumber: phoneNumber,
-          cnic: cnic,
-        );
-      }
+
+      return null;
+    } catch (e) {
+      log('Signup failed : $e');
       Get.snackbar(
         "Signup Error",
         "Invalid details",
@@ -76,9 +68,6 @@ class SignupService {
         backgroundColor: Colors.redAccent,
         snackPosition: SnackPosition.BOTTOM,
       );
-      return null;
-    } catch (e) {
-      log('Signup failed : $e');
       return null;
     }
   }

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:consumer_app/src/controller/auth_controller/signup_controller.dart';
 import 'package:consumer_app/src/core/constants/app_assets.dart';
 import 'package:consumer_app/src/core/constants/app_colors.dart';
+import 'package:consumer_app/src/core/utils/cnic_formatter.dart';
 import 'package:consumer_app/src/core/validation/app_validation.dart';
 import 'package:consumer_app/src/routes/route_names.dart';
 import 'package:consumer_app/src/view/components/common_components/app_size_component.dart';
@@ -10,6 +11,7 @@ import 'package:consumer_app/src/view/components/common_components/custom_text_f
 import 'package:consumer_app/src/view/components/common_components/fractionally_elevated_button.dart';
 import 'package:consumer_app/src/view/components/common_components/title_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -200,6 +202,11 @@ class _SignupScreenState extends State<SignupScreen> {
       keyboardType: TextInputType.phone,
       hintColor: Colors.black,
       isUnderLine: false,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(13),
+        CnicInputFormatter(),
+      ],
     );
   }
 
@@ -284,16 +291,20 @@ class _SignupScreenState extends State<SignupScreen> {
           backgroundColor: AppColors.authButtonBakgroundColor,
           onTap: () async {
             if (_formKey.currentState!.validate()) {
+              String cleanCnic = cnicController.text.replaceAll(
+                RegExp(r'[^0-9]'),
+                '',
+              );
               var result = await signupController.signup(
                 userNameController.text.trim(),
                 emailController.text.trim(),
                 passwordController.text.trim(),
                 phoneNumberController.text.trim(),
-                cnicController.text.trim(),
+                cleanCnic,
               );
-              log("RESULT : $result");
+              log("RESULT BEFORE : ${result!.message}");
               if (result != null) {
-                log("RESULT : $result");
+                log("RESULT AFTER : ${result!.message}");
                 // String value = signupController;
                 Get.offNamed(RouteNames.loginScreen);
               }
