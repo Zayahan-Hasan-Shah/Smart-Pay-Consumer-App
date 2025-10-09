@@ -26,6 +26,7 @@ class _CustomDropdownState extends State<CustomDropdown>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOutCubic,
@@ -52,7 +53,11 @@ class _CustomDropdownState extends State<CustomDropdown>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TitleText(title: selected ?? widget.hint, fontSize: 16.sp),
+                  TitleText(
+                    title: selected ?? widget.hint,
+                    fontSize: 16.sp,
+                    color: theme.colorScheme.onSurface,
+                  ),
 
                   AnimatedRotation(
                     turns: expanded ? 0.5 : 0,
@@ -83,7 +88,11 @@ class _CustomDropdownState extends State<CustomDropdown>
                     horizontal: 16,
                     vertical: 14,
                   ),
-                  child: TitleText(title: item, fontSize: 15.sp),
+                  child: TitleText(
+                    title: item,
+                    fontSize: 15.sp,
+                    color: theme.colorScheme.onSurface,
+                  ),
                 ),
               ),
             ),

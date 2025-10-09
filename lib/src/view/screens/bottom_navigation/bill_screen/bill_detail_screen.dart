@@ -17,24 +17,35 @@ class BillDetailScreen extends StatelessWidget {
     final BillModel bill = Get.arguments as BillModel;
     final isOverdue = !bill.isPaid && DateTime.now().isAfter(bill.dueDate);
 
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
+      // backgroundColor: theme.appBarTheme.backgroundColor,
       appBar: CustomAppbar(title: "Bill Detail", isnotify: false, isback: true),
-      // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Padding(
         padding: EdgeInsets.all(3.h),
         child: Column(
           children: [
-            _buildText(bill.billId, fontSize: 18.sp),
+            _buildText(bill.billId, fontSize: 18.sp, color: theme.appBarTheme.foregroundColor),
             SizedBox(height: 1.5.h),
-            _buildRow(bill.billName, bill.isPaid, isStatus: true),
+            _buildRow(
+              bill.billName,
+              bill.isPaid,
+              isStatus: true,
+              color1: theme.appBarTheme.foregroundColor,
+            ),
 
-            Divider(color: AppColors.grey.withOpacity(0.4), height: 2.h),
+            Divider(
+              color: theme.appBarTheme.foregroundColor!.withOpacity(0.4),
+              height: 2.h,
+            ),
             _buildRow(
               "Bill Amount",
               "Issue Date",
               fontSize1: 15.sp,
               fontSize2: 15.sp,
+              color1: theme.appBarTheme.foregroundColor,
+              color2: theme.appBarTheme.foregroundColor,
             ),
             SizedBox(height: 1.h),
             _buildRow(
@@ -44,6 +55,8 @@ class BillDetailScreen extends StatelessWidget {
               fontSize2: 18.sp,
               isAmount: true,
               isDate: true,
+              color1: theme.appBarTheme.foregroundColor,
+              color2: theme.appBarTheme.foregroundColor,
             ),
             SizedBox(height: 2.5.h),
             _buildRow(
@@ -51,6 +64,8 @@ class BillDetailScreen extends StatelessWidget {
               "Expiration Date",
               fontSize1: 15.sp,
               fontSize2: 15.sp,
+              color1: theme.appBarTheme.foregroundColor,
+              color2: theme.appBarTheme.foregroundColor,
             ),
             SizedBox(height: 1.h),
             _buildRow(
@@ -59,6 +74,8 @@ class BillDetailScreen extends StatelessWidget {
               fontSize1: 18.sp,
               fontSize2: 18.sp,
               isBothDate: true,
+              color1: theme.appBarTheme.foregroundColor,
+              color2: theme.appBarTheme.foregroundColor,
             ),
 
             SizedBox(height: 4.h),
@@ -145,6 +162,8 @@ class BillDetailScreen extends StatelessWidget {
     dynamic text2, {
     bool isDate = false,
     bool isAmount = false,
+    Color? color1 = Colors.black,
+    Color? color2 = Colors.black,
     double? fontSize1 = 16,
     double? fontSize2 = 16,
     bool isStatus = false,
@@ -154,31 +173,52 @@ class BillDetailScreen extends StatelessWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildText(formatAmountPKR(text1), fontSize: fontSize1 ?? 18.sp),
-          _buildText(formatDate(text2), fontSize: fontSize2 ?? 18.sp),
+          _buildText(
+            formatAmountPKR(text1),
+            fontSize: fontSize1 ?? 18.sp,
+            color: color1,
+          ),
+          _buildText(
+            formatDate(text2),
+            fontSize: fontSize2 ?? 18.sp,
+            color: color2,
+          ),
         ],
       );
     } else if (isDate) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildText(text1, fontSize: fontSize1 ?? 18.sp),
-          _buildText(formatDate(text2), fontSize: fontSize2 ?? 18.sp),
+          _buildText(text1, fontSize: fontSize1 ?? 18.sp, color: color1),
+          _buildText(
+            formatDate(text2),
+            fontSize: fontSize2 ?? 18.sp,
+            color: color2,
+          ),
         ],
       );
     } else if (isAmount) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildText(formatAmountPKR(text1), fontSize: fontSize1 ?? 18.sp),
-          _buildText(text2, fontSize: fontSize2 ?? 18.sp),
+          _buildText(
+            formatAmountPKR(text1),
+            fontSize: fontSize1 ?? 18.sp,
+            color: color1,
+          ),
+          _buildText(text2, fontSize: fontSize2 ?? 18.sp, color: color2),
         ],
       );
     } else if (isStatus) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildText(text1, fontSize: 22.sp, weight: FontWeight.w600),
+          _buildText(
+            text1,
+            fontSize: 22.sp,
+            weight: FontWeight.w600,
+            color: color1,
+          ),
           _buildIsPaid(text2),
         ],
       );
@@ -186,16 +226,24 @@ class BillDetailScreen extends StatelessWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildText(formatDate(text1), fontSize: fontSize2 ?? 18.sp),
-          _buildText(formatDate(text2), fontSize: fontSize2 ?? 18.sp),
+          _buildText(
+            formatDate(text1),
+            fontSize: fontSize2 ?? 18.sp,
+            color: color1,
+          ),
+          _buildText(
+            formatDate(text2),
+            fontSize: fontSize2 ?? 18.sp,
+            color: color2,
+          ),
         ],
       );
     } else {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildText(text1, fontSize: fontSize1 ?? 18.sp),
-          _buildText(text2, fontSize: fontSize2 ?? 18.sp),
+          _buildText(text1, fontSize: fontSize1 ?? 18.sp, color: color1),
+          _buildText(text2, fontSize: fontSize2 ?? 18.sp, color: color2),
         ],
       );
     }

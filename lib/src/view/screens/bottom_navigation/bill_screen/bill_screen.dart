@@ -138,7 +138,7 @@ class _BillScreenState extends State<BillScreen> {
 
   /// Dropdown of all existing consumer numbers
   Widget _buildDropDown() {
-    return CustomDropdown(
+  return CustomDropdown(
       items: consumerController.consumerNumbers.map((e) => e.number).toList(),
       hint: "Select Consumer Number",
       onChanged: (value) async {

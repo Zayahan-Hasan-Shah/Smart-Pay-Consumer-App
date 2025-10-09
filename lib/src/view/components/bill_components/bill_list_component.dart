@@ -15,11 +15,13 @@ class BillListComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       margin: EdgeInsets.symmetric(vertical: 1.h),
       padding: EdgeInsets.all(2.h),
       decoration: BoxDecoration(
         color: AppColors.backgroundColor,
+        // color: theme.colorScheme.background,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -70,7 +72,7 @@ class BillListComponent extends StatelessWidget {
           Obx(() {
             return SwitchListTile(
               contentPadding: EdgeInsets.zero,
-              title: const Text("Set Reminder"),
+              title: const TitleText(title: "Set Reminder"),
               value: reminderController.isReminderOn.value,
               onChanged: (value) => reminderController.toggleReminder(
                 context,

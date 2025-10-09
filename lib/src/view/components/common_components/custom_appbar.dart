@@ -23,28 +23,31 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return AppBar(
       shape: Border(
         bottom: BorderSide(color: AppColors.appBarBottomBorderColor, width: 1),
       ),
       centerTitle: istitleCenter ?? false,
       iconTheme: const IconThemeData(color: AppColors.white),
-      backgroundColor: AppColors.whiteBackgroundColor,
+      backgroundColor: theme.appBarTheme.backgroundColor,
       elevation: 1,
       title: TitleText(
         title: title,
-        fontSize: 18.sp,
-        weight: FontWeight.bold,
-        color: AppColors.appBarTitleTextColor,
+        style: Theme.of(Get.context!).textTheme.titleLarge?.copyWith(
+          fontWeight: FontWeight.bold,
+          fontSize: 16.sp,
+          color: theme.appBarTheme.foregroundColor,
+        ),
       ),
       leading: isback
           ? IconButton(
               onPressed: () {
                 Get.back();
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.chevron_left,
-                color: AppColors.appBarTitleTextColor,
+                color: theme.appBarTheme.foregroundColor,
               ),
             )
           : null,
@@ -60,10 +63,10 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
           ),
         IconButton(
           onPressed: () {},
-          icon: const Icon(
+          icon: Icon(
             Icons.person,
             size: 30,
-            color: AppColors.appBarTitleTextColor,
+            color: theme.appBarTheme.foregroundColor,
           ),
         ),
       ],
