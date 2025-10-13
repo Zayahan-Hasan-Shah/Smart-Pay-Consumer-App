@@ -206,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
               log("RESULT  BEFORE IF: $result");
               if (result != null) {
                 log("RESULT AFTER IF : $result");
-                StorageServices().write("user_id", result.id.toString());
+                StorageServices().write("user_id", result.userId.toString());
                 Get.offNamed(RouteNames.landingPageScreen);
               }
             }

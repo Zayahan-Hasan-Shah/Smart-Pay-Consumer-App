@@ -4,6 +4,7 @@ import 'package:consumer_app/src/controller/auth_controller/signup_controller.da
 import 'package:consumer_app/src/core/constants/app_assets.dart';
 import 'package:consumer_app/src/core/constants/app_colors.dart';
 import 'package:consumer_app/src/core/utils/cnic_formatter.dart';
+import 'package:consumer_app/src/core/utils/phone_number_formatter.dart';
 import 'package:consumer_app/src/core/validation/app_validation.dart';
 import 'package:consumer_app/src/routes/route_names.dart';
 import 'package:consumer_app/src/view/components/common_components/app_size_component.dart';
@@ -264,6 +265,7 @@ class _SignupScreenState extends State<SignupScreen> {
       keyboardType: TextInputType.phone,
       hintColor: Colors.black,
       isUnderLine: false,
+      inputFormatters: [PakistanPhoneFormatter()],
     );
   }
 
@@ -295,16 +297,20 @@ class _SignupScreenState extends State<SignupScreen> {
                 RegExp(r'[^0-9]'),
                 '',
               );
+              final cleanPhone = phoneNumberController.text.replaceAll(
+                RegExp(r'\D'),
+                '',
+              );
               var result = await signupController.signup(
                 userNameController.text.trim(),
                 emailController.text.trim(),
                 passwordController.text.trim(),
-                phoneNumberController.text.trim(),
+                cleanPhone,
                 cleanCnic,
               );
-              log("RESULT BEFORE : ${result!.message}");
+              log("RESULT BEFORE : ${result?.message}");
               if (result != null) {
-                log("RESULT AFTER : ${result!.message}");
+                log("RESULT AFTER : ${result.message}");
                 // String value = signupController;
                 Get.offNamed(RouteNames.loginScreen);
               }

@@ -17,6 +17,7 @@ class APIService {
       var header = {"Content-Type": "application/json"};
       log("*** Request ***");
       log("URI : $api");
+      log("BODY : $body");
 
       final response = await http.post(
         headers: header,

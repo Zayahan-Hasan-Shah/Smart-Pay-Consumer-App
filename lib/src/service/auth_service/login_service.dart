@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:consumer_app/src/core/constants/api_url.dart';
 import 'package:consumer_app/src/model/user_model/user_model.dart';
 import 'package:consumer_app/src/service/common_service/api_service.dart';
 import 'package:crypto/crypto.dart';
@@ -23,12 +24,18 @@ class LoginService {
   }
 
   Future<UserModel?> login(String email, String password) async {
-    try {
+    try { 
       Uint8List encoded = encodeUtf16Le(password);
+      log("UTL16 ENCODED PASSWORD IS : $encoded");
       var sendPassword = sha256.convert(encoded);
-      var bodySent = {"LoginId": email, "Password": sendPassword.toString()};
+      var bodySent = {"email": email, "password": sendPassword.toString()};
 
-      if (email == 'zayahan@gmail.com' && password == '123qwe') {
+      var response = await APIService.login(
+        api: ApiUrl.loginUrl,
+        body: bodySent,
+      );
+
+      if (response != null) {
         Get.snackbar(
           "Login Successfully",
           "Welcome",
@@ -36,42 +43,16 @@ class LoginService {
           backgroundColor: Colors.green,
           snackPosition: SnackPosition.BOTTOM,
         );
-        return UserModel(
-          id: 1,
-          name: "Zayahan",
-          email: "zayahan@gmail.com",
-          phoneNumber: "923327699137",
-        );
-      } else {
-        Get.snackbar(
-          "Login Error",
-          "Invalid Credentials",
-          colorText: Colors.white,
-          backgroundColor: Colors.redAccent,
-          snackPosition: SnackPosition.BOTTOM,
-        ); // explicitly return null
-        return null;
+        final parsedList = userModelFromJson(response);
+        return parsedList;
       }
-      // var response = await APIService.login(api: '', body: bodySent);
-
-      // if (response != null) {
-      //   Get.snackbar(
-      //     "Login Successfully",
-      //     "Welcome",
-      //     colorText: Colors.white,
-      //     backgroundColor: Colors.green,
-      //     snackPosition: SnackPosition.BOTTOM,
-      //   );
-      //   final parsedList = userModelFromJson(response);
-      //   return parsedList;
-      // }
-      // Get.snackbar(
-      //   "Login Error",
-      //   "Invalid Credentials",
-      //   colorText: Colors.white,
-      //   backgroundColor: Colors.redAccent,
-      //   snackPosition: SnackPosition.BOTTOM,
-      // );
+      Get.snackbar(
+        "Login Error",
+        "Invalid Credentials",
+        colorText: Colors.white,
+        backgroundColor: Colors.redAccent,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } catch (e) {
       log("LOGIN SERVICE ERROR : $e");
       return null;
