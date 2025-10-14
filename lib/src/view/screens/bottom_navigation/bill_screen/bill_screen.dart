@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:consumer_app/src/controller/bill_controller/bill_controller.dart';
 import 'package:consumer_app/src/controller/consumer_number_controller/consumer_number_controller.dart';
 import 'package:consumer_app/src/core/constants/app_colors.dart';
@@ -148,7 +147,7 @@ class _BillScreenState extends State<BillScreen> {
       },
     );
   }
-  
+
   /// Bills section
   Widget _buildBillsList() {
     return Obx(() {
@@ -160,53 +159,128 @@ class _BillScreenState extends State<BillScreen> {
         return const Center(child: Text("No bills found"));
       }
 
-      return RefreshIndicator(
-        onRefresh: () async {
-          if (billController.currentConsumerNumberId != null) {
-            await billController.fetchBillsByConsumerId(
-              billController.currentConsumerNumberId!,
-              refresh: true,
-            );
-          }
-        },
-        child: NotificationListener<ScrollNotification>(
-          onNotification: (scrollInfo) {
-            if (scrollInfo.metrics.pixels ==
-                    scrollInfo.metrics.maxScrollExtent &&
-                billController.hasNext &&
-                !billController.isLoadingMore.value) {
-              billController.loadMoreBills();
-            }
-            return false;
-          },
-          child: ListView.builder(
-            itemCount:
-                billController.bills.length +
-                (billController.isLoadingMore.value ? 1 : 0),
-            itemBuilder: (context, index) {
-              if (index == billController.bills.length) {
-                // Loading indicator at bottom
-                return const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              }
+      final displayedBills = billController.filteredBills.isNotEmpty
+          ? billController.filteredBills
+          : billController.bills;
 
-              final BillModel bill = billController.bills[index];
-              return Padding(
-                padding: EdgeInsets.only(bottom: 1.5.h),
-                child: GestureDetector(
-                  onTap: () {
-                    Get.toNamed(RouteNames.billDetailScreen, arguments: bill);
-                  },
-                  child: BillListComponent(bill: bill),
+      return NotificationListener<ScrollNotification>(
+        onNotification: (scrollInfo) {
+          if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent &&
+              billController.hasNext &&
+              !billController.isLoadingMore.value) {
+            billController.loadMoreBills();
+          }
+          return false;
+        },
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                icon: const Icon(
+                  Icons.filter_alt,
+                  color: AppColors.primaryColor,
                 ),
-              );
-            },
-          ),
+                onPressed: () => _showFilterSheet(),
+              ),
+            ),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  if (billController.currentConsumerNumberId != null) {
+                    await billController.fetchBillsByConsumerId(
+                      billController.currentConsumerNumberId!,
+                      refresh: true,
+                    );
+                  }
+                },
+                child: ListView.builder(
+                  itemCount: displayedBills.length,
+                  itemBuilder: (context, index) {
+                    final BillModel bill = displayedBills[index];
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: 1.5.h),
+                      child: GestureDetector(
+                        onTap: () => Get.toNamed(
+                          RouteNames.billDetailScreen,
+                          arguments: bill,
+                        ),
+                        child: BillListComponent(bill: bill),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       );
     });
   }
 
+  void _showFilterSheet() {
+    Get.bottomSheet(
+      Container(
+        padding: EdgeInsets.all(3.h),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const TitleText(
+              title: "Filter Bills",
+              fontSize: 20,
+              weight: FontWeight.bold,
+            ),
+            SizedBox(height: 2.h),
+            _buildFilterOption("Due Date", BillFilterType.dueDate),
+            _buildFilterOption("Issue Date", BillFilterType.issueDate),
+            _buildFilterOption("Paid Bills", BillFilterType.paid),
+            _buildFilterOption("Unpaid Bills", BillFilterType.unpaid),
+            _buildFilterOption("Reminder Bills", BillFilterType.reminder),
+            SizedBox(height: 2.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () {
+                    billController.clearFilters();
+                    Get.back();
+                  },
+                  icon: const Icon(Icons.clear),
+                  label: const Text("Clear"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.danger,
+                  ),
+                ),
+                ElevatedButton.icon(
+                  onPressed: () => Get.back(),
+                  icon: const Icon(Icons.check),
+                  label: const Text("Apply"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.authButtonBakgroundColor,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFilterOption(String title, BillFilterType type) {
+    return Obx(() {
+      final isSelected = billController.selectedFilters.contains(type);
+      return CheckboxListTile(
+        value: isSelected,
+        title: Text(title),
+        activeColor: AppColors.authButtonBakgroundColor,
+        onChanged: (val) => billController.toggleFilter(type),
+      );
+    });
+  }
 }

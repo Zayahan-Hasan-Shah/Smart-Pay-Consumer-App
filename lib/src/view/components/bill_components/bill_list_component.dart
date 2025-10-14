@@ -13,8 +13,15 @@ class BillListComponent extends StatelessWidget {
 
   BillListComponent({super.key, required this.bill}) {
     reminderController = Get.put(
-      ReminderController(),
+      ReminderController(
+        billId: bill.billId.toString(),
+        billName: bill.billName,
+      ),
       tag: bill.billId.toString(),
+    );
+    ReminderController.registerController(
+      bill.billId.toString(),
+      reminderController,
     );
   }
 
@@ -95,10 +102,18 @@ class BillListComponent extends StatelessWidget {
             if (controller.reminderDate.value != null)
               Padding(
                 padding: EdgeInsets.only(left: 1.h, top: 0.5.h),
-                child: Text(
-                  "Reminder: ${formatDate(controller.reminderDate.value!)}",
-                  style: TextStyle(color: AppColors.info, fontSize: 14.sp),
+
+                child: TitleText(
+                  title:
+                      "Reminder: ${formatDate(controller.reminderDate.value!)}",
+                  fontSize: 18.sp,
+                  color: AppColors.info,
+                  weight: FontWeight.bold,
                 ),
+                // child: Text(
+                //   "Reminder: ${formatDate(controller.reminderDate.value!)}",
+                //   style: TextStyle(color: AppColors.info, fontSize: 14.sp),
+                // ),
               ),
           ],
         ),
