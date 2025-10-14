@@ -9,99 +9,101 @@ import 'package:sizer/sizer.dart';
 
 class BillListComponent extends StatelessWidget {
   final BillModel bill;
-  final ReminderController reminderController = Get.put(ReminderController());
+  late final ReminderController reminderController;
 
-  BillListComponent({super.key, required this.bill});
+  BillListComponent({super.key, required this.bill}) {
+    reminderController = Get.put(
+      ReminderController(),
+      tag: bill.billId.toString(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 1.h),
-      padding: EdgeInsets.all(2.h),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundColor,
-        // color: theme.colorScheme.background,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // ===== Header Row (Bill Name + Due Date) =====
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                // ✅ allows wrapping
-                child: _buildText(
-                  bill.billName,
-                  fontSize: 18.sp,
+    return Obx(() {
+      final controller = Get.find<ReminderController>(
+        tag: bill.billId.toString(),
+      );
+      return Container(
+        margin: EdgeInsets.symmetric(vertical: 1.h),
+        padding: EdgeInsets.all(2.h),
+        decoration: BoxDecoration(
+          color: AppColors.backgroundColor,
+          // color: theme.colorScheme.background,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ===== Header Row (Bill Name + Due Date) =====
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  //  allows wrapping
+                  child: _buildText(
+                    bill.billName,
+                    fontSize: 18.sp,
+                    weight: FontWeight.w600,
+                  ),
+                ),
+                _buildText(
+                  formatDate(bill.dueDate),
+                  fontSize: 15.sp,
+                  weight: FontWeight.w400,
+                ),
+              ],
+            ),
+            SizedBox(height: 2.h),
+
+            // ===== Amount + Paid Status =====
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildText(
+                  formatAmountPKR(bill.amount),
+                  fontSize: 22.sp,
                   weight: FontWeight.w600,
                 ),
-              ),
-              _buildText(
-                formatDate(bill.dueDate),
-                fontSize: 15.sp,
-                weight: FontWeight.w400,
-              ),
-            ],
-          ),
-          SizedBox(height: 2.h),
+                _buildIsPaid(bill.isPaid),
+              ],
+            ),
 
-          // ===== Amount + Paid Status =====
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildText(
-                formatAmountPKR(bill.amount),
-                fontSize: 22.sp,
-                weight: FontWeight.w600,
-              ),
-              _buildIsPaid(bill.isPaid),
-            ],
-          ),
+            SizedBox(height: 2.h),
+            Divider(color: AppColors.grey.withOpacity(0.4), height: 2.h),
 
-          SizedBox(height: 2.h),
-          Divider(color: AppColors.grey.withOpacity(0.4), height: 2.h),
-
-          // ===== Reminder Switch =====
-          Obx(() {
-            return SwitchListTile(
+            // ===== Reminder Switch =====
+            SwitchListTile(
               contentPadding: EdgeInsets.zero,
               title: const TitleText(title: "Set Reminder"),
-              value: reminderController.isReminderOn.value,
-              onChanged: (value) => reminderController.toggleReminder(
-                context,
-                value,
-                bill.dueDate,
-              ),
+              value: controller.isReminderOn.value,
+              onChanged: (value) =>
+                  controller.toggleReminder(context, value, bill.dueDate),
               secondary: Icon(Icons.alarm, color: AppColors.info),
-            );
-          }),
+            ),
 
-          // ===== Show reminder date (if any) =====
-          Obx(() {
-            if (reminderController.reminderDate.value == null) {
-              return const SizedBox.shrink();
-            }
-            return Padding(
-              padding: EdgeInsets.only(left: 1.h, top: 0.5.h),
-              child: Text(
-                "Reminder: ${formatDate(reminderController.reminderDate.value!)}",
-                style: TextStyle(color: AppColors.info, fontSize: 12.sp),
+            // ===== Show reminder date (if any) =====
+            if (controller.reminderDate.value != null)
+              Padding(
+                padding: EdgeInsets.only(left: 1.h, top: 0.5.h),
+                child: Text(
+                  "Reminder: ${formatDate(controller.reminderDate.value!)}",
+                  style: TextStyle(color: AppColors.info, fontSize: 14.sp),
+                ),
               ),
-            );
-          }),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildText(
@@ -119,7 +121,9 @@ class BillListComponent extends StatelessWidget {
       color: color ?? Colors.black,
       weight: weight ?? FontWeight.normal,
       maxLines: shouldWrap ? 2 : 1, // ✅ two lines if length > 12
-      overflow: shouldWrap ? TextOverflow.ellipsis : TextOverflow.visible, // ✅ let it wrap instead of cutting
+      overflow: shouldWrap
+          ? TextOverflow.ellipsis
+          : TextOverflow.visible, // ✅ let it wrap instead of cutting
     );
   }
 
