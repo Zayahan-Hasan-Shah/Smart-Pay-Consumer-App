@@ -120,7 +120,7 @@ class APIService {
         body: jsonEncode(body),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         log("*** response ***");
         log("URI : $api");
 

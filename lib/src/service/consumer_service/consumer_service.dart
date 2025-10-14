@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:consumer_app/src/core/constants/api_url.dart';
 import 'package:consumer_app/src/core/constants/app_colors.dart';
 import 'package:consumer_app/src/model/consumer_model/consumer_model.dart';
 import 'package:consumer_app/src/service/common_service/api_service.dart';
@@ -10,23 +11,24 @@ class ConsumerService {
   Future<String?> createConsumerNumber(int id, String cNo) async {
     try {
       var bodySent = {"userId": id, "consumerNumber": cNo};
-      var response = await APIService.post(api: "", body: bodySent);
+      var response = await APIService.post(
+        api: ApiUrl.registerConsumerNoUrl,
+        body: bodySent,
+      );
 
       if (response != null) {
-        if (response.statusCode == 200) {
-          Get.snackbar(
-            "Successfull",
-            "Consumer Number Registered",
-            colorText: AppColors.white,
-            backgroundColor: AppColors.primaryColor,
-            snackPosition: SnackPosition.BOTTOM,
-          );
-          return response.body;
-        }
+        Get.snackbar(
+          "Successfull",
+          "Consumer Number Registered",
+          colorText: AppColors.white,
+          backgroundColor: AppColors.primaryColor,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return response;
       }
       Get.snackbar(
-        "Error",
-        "Consumer Number Didn't Registered",
+        "Failed",
+        "Failed to Register Consumer Number",
         colorText: AppColors.white,
         backgroundColor: AppColors.danger,
         snackPosition: SnackPosition.BOTTOM,
@@ -40,7 +42,20 @@ class ConsumerService {
 
   Future<List<ConsumerModel>?> getConsumerNumbrOfUser(int userId) async {
     try {
-      if (userId == 1) {
+      var response = await APIService.get(
+        api: '${ApiUrl.getConsumerNoOfUser}$userId',
+      );
+      if (response != null) {
+        final decoded = jsonDecode(response);
+        final List<dynamic> list = decoded["consumerNumbers"];
+        final consumers = list
+            .map(
+              (item) => ConsumerModel(
+                consumerNumberId: item["consumerNumberId"],
+                number: item["number"],
+              ),
+            )
+            .toList();
         Get.snackbar(
           "Successfull",
           "Consumer Number Fetched",
@@ -48,12 +63,7 @@ class ConsumerService {
           backgroundColor: AppColors.primaryColor,
           snackPosition: SnackPosition.BOTTOM,
         );
-        return [
-          ConsumerModel(consumerNumberId: 1, number: "6005425018088321"),
-          ConsumerModel(consumerNumberId: 2, number: "6005425018088322"),
-          ConsumerModel(consumerNumberId: 3, number: "6005425018088323"),
-          ConsumerModel(consumerNumberId: 4, number: "6005425018088324"),
-        ];
+        return consumers;
       }
       Get.snackbar(
         "Error",
@@ -62,6 +72,7 @@ class ConsumerService {
         backgroundColor: AppColors.danger,
         snackPosition: SnackPosition.BOTTOM,
       );
+      return null;
     } catch (e) {
       log("Error occur while fetching Consumer Number $e");
       return null;

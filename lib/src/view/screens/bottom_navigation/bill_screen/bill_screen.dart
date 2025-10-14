@@ -36,11 +36,8 @@ class _BillScreenState extends State<BillScreen> {
   }
 
   Future<void> _loadConsumerNumbers() async {
-    final userInfo = await StorageServices().read("user_info");
-    final userMap = userInfo != null
-        ? jsonDecode(userInfo)
-        : {"id": 1}; // mock user
-    await consumerController.getConsumerNumbrOfUser(userMap['id'].toString());
+    final userId = await StorageServices().read("user_id");
+    await consumerController.getConsumerNumbrOfUser(userId.toString());
   }
 
   @override
@@ -138,16 +135,20 @@ class _BillScreenState extends State<BillScreen> {
 
   /// Dropdown of all existing consumer numbers
   Widget _buildDropDown() {
-  return CustomDropdown(
-      items: consumerController.consumerNumbers.map((e) => e.number).toList(),
+    final items = consumerController.consumerNumbers;
+
+    return CustomDropdown(
+      items: items.map((e) => e.number).toList(),
       hint: "Select Consumer Number",
-      onChanged: (value) async {
-        selectedConsumerNumber = value;
-        await billController.fetchBills(value);
+      onChanged: (selectedNumber) async {
+        final selected = items.firstWhere((e) => e.number == selectedNumber);
+        billController.currentConsumerNumberId =
+            selected.consumerNumberId; // ✅ Save ID globally
+        await billController.fetchBillsByConsumerId(selected.consumerNumberId);
       },
     );
   }
-
+  
   /// Bills section
   Widget _buildBillsList() {
     return Obx(() {
@@ -159,21 +160,53 @@ class _BillScreenState extends State<BillScreen> {
         return const Center(child: Text("No bills found"));
       }
 
-      return ListView.builder(
-        itemCount: billController.bills.length,
-        itemBuilder: (context, index) {
-          final BillModel bill = billController.bills[index];
-          return Padding(
-            padding: EdgeInsets.only(bottom: 1.5.h),
-            child: GestureDetector(
-              onTap: () {
-                Get.toNamed(RouteNames.billDetailScreen, arguments: bill);
-              },
-              child: BillListComponent(bill: bill),
-            ),
-          );
+      return RefreshIndicator(
+        onRefresh: () async {
+          if (billController.currentConsumerNumberId != null) {
+            await billController.fetchBillsByConsumerId(
+              billController.currentConsumerNumberId!,
+              refresh: true,
+            );
+          }
         },
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (scrollInfo) {
+            if (scrollInfo.metrics.pixels ==
+                    scrollInfo.metrics.maxScrollExtent &&
+                billController.hasNext &&
+                !billController.isLoadingMore.value) {
+              billController.loadMoreBills();
+            }
+            return false;
+          },
+          child: ListView.builder(
+            itemCount:
+                billController.bills.length +
+                (billController.isLoadingMore.value ? 1 : 0),
+            itemBuilder: (context, index) {
+              if (index == billController.bills.length) {
+                // Loading indicator at bottom
+                return const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              final BillModel bill = billController.bills[index];
+              return Padding(
+                padding: EdgeInsets.only(bottom: 1.5.h),
+                child: GestureDetector(
+                  onTap: () {
+                    Get.toNamed(RouteNames.billDetailScreen, arguments: bill);
+                  },
+                  child: BillListComponent(bill: bill),
+                ),
+              );
+            },
+          ),
+        ),
       );
     });
   }
+
 }

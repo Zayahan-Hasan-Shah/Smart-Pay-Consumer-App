@@ -9,33 +9,32 @@ class ConsumerNumberController extends GetxController {
   var consumerNumbers = <ConsumerModel>[].obs;
 
   Future<String?> consumerNumber(String consumerNumber) async {
-    try {
-      final user_info = await StorageServices().read("user_info");
-      final userMap = user_info != null ? jsonDecode(user_info) : {"id": 1}; // mock user
+    final userId = await StorageServices().read("user_id");
 
+    try {
       isLoading.value = true;
-      dynamic response = await ConsumerService().createConsumerNumber(
-        userMap['id'],
+      final response = await ConsumerService().createConsumerNumber(
+        int.parse(userId!),
         consumerNumber,
       );
 
       if (response != null) {
-        // refresh consumer numbers after successful registration
-        isLoading.value = false;
-        await getConsumerNumbrOfUser(userMap['id'].toString());
-        return response;
+        await getConsumerNumbrOfUser(userId!.toString());
       }
-      return null;
+      return response;
     } catch (e) {
-      isLoading.value = false;
       return null;
+    } finally {
+      isLoading.value = false;
     }
   }
 
   Future<void> getConsumerNumbrOfUser(String id) async {
     try {
       isLoading.value = true;
-      var response = await ConsumerService().getConsumerNumbrOfUser(int.parse(id));
+      var response = await ConsumerService().getConsumerNumbrOfUser(
+        int.parse(id),
+      );
       if (response != null) {
         consumerNumbers.assignAll(response);
       }

@@ -38,10 +38,13 @@ class BillListComponent extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildText(
-                bill.billName,
-                fontSize: 18.sp,
-                weight: FontWeight.w600,
+              Expanded(
+                // ✅ allows wrapping
+                child: _buildText(
+                  bill.billName,
+                  fontSize: 18.sp,
+                  weight: FontWeight.w600,
+                ),
               ),
               _buildText(
                 formatDate(bill.dueDate),
@@ -107,11 +110,16 @@ class BillListComponent extends StatelessWidget {
     Color? color,
     FontWeight? weight,
   }) {
+    // Check if bill name length is greater than 12 → allow 2 lines
+    final bool shouldWrap = title.length > 12;
+
     return TitleText(
       title: title,
       fontSize: fontSize ?? 16.sp,
       color: color ?? Colors.black,
       weight: weight ?? FontWeight.normal,
+      maxLines: shouldWrap ? 2 : 1, // ✅ two lines if length > 12
+      overflow: shouldWrap ? TextOverflow.ellipsis : TextOverflow.visible, // ✅ let it wrap instead of cutting
     );
   }
 

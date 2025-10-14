@@ -138,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
       title: text,
       fontSize: fontSize ?? 18,
       color: Colors.black,
-      textAlign: isCenter ? TextAlign.center : null,
+      alignText: isCenter ? TextAlign.center : null,
     );
   }
 
