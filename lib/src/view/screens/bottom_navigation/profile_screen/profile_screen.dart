@@ -45,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(height: 1.2.h),
               _buildContainer(
                 "CNIC",
-                "923327699138",
+                "4250180883267",
                 color: theme.appBarTheme.foregroundColor ?? Colors.black,
               ),
               SizedBox(height: 1.2.h),
