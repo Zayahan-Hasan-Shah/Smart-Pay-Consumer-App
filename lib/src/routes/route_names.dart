@@ -14,6 +14,8 @@ class RouteNames {
   static const transactionDetailScreen = '/transactiondetailscreen';
   static const profileScreen = '/profilescreen';
   static const settingScreen = '/settingscreen';
+  static const reminderScreen = '/reminderscreen';
+  static const notificationScreen = '/notificationscreen';
   
 
 }

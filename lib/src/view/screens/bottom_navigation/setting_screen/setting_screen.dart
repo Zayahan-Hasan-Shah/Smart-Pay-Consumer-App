@@ -40,7 +40,9 @@ class SettingScreen extends StatelessWidget {
                   icon: Icons.notifications,
                   title: "Notifications",
                   subtitle: "Control push & email alerts",
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed(RouteNames.notificationScreen);
+                  },
                 ),
 
                 // 🔥 Dark Mode Switch
@@ -50,7 +52,12 @@ class SettingScreen extends StatelessWidget {
                     onChanged: (value) => themeController.toggleTheme(),
                     secondary: Icon(
                       Icons.dark_mode,
-                      color: const Color.fromARGB(255, 19, 37, 53), // theme.colorScheme.primary,
+                      color: const Color.fromARGB(
+                        255,
+                        19,
+                        37,
+                        53,
+                      ), // theme.colorScheme.primary,
                     ),
                     title: TitleText(
                       title: "Dark Mode",
@@ -125,11 +132,10 @@ class SettingScreen extends StatelessWidget {
           title: title,
           fontSize: 17.sp,
           weight: FontWeight.w600,
-                  // style: Theme.of(Get.context!).textTheme.titleMedium?.copyWith(
+
+          // style: Theme.of(Get.context!).textTheme.titleMedium?.copyWith(
           //   fontWeight: FontWeight.bold,
           //   fontSize: 16,
-          
-      
         ),
         subtitle: Text(
           subtitle,

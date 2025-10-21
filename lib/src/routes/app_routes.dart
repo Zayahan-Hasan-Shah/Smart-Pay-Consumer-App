@@ -9,7 +9,9 @@ import 'package:consumer_app/src/view/screens/bottom_navigation/profile_screen/p
 import 'package:consumer_app/src/view/screens/bottom_navigation/setting_screen/setting_screen.dart';
 import 'package:consumer_app/src/view/screens/bottom_navigation/transaction_screen/transaction_detail_screen.dart';
 import 'package:consumer_app/src/view/screens/bottom_navigation/transaction_screen/transaction_screen.dart';
+import 'package:consumer_app/src/view/screens/notification/notification_screen.dart';
 import 'package:consumer_app/src/view/screens/on_boarding/splash_screen.dart';
+import 'package:consumer_app/src/view/screens/reminders/reminder_screen.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
 class AppRoutes {
@@ -25,5 +27,7 @@ class AppRoutes {
     GetPage(name: RouteNames.transactionDetailScreen, page: () => const TransactionDetailScreen()),
     GetPage(name: RouteNames.profileScreen, page: () => const ProfileScreen()),
     GetPage(name: RouteNames.settingScreen, page: () => const SettingScreen()),
+    GetPage(name: RouteNames.notificationScreen, page: () => const NotificationScreen()),
+    GetPage(name: RouteNames.reminderScreen, page: () => const ReminderScreen()),
   ];
 }

@@ -2,6 +2,7 @@ import 'package:consumer_app/src/controller/dashboard_controller/dashboard_contr
 import 'package:consumer_app/src/core/constants/app_colors.dart';
 import 'package:consumer_app/src/core/constants/dummy_data/recent_transaction_dummy_data.dart';
 import 'package:consumer_app/src/view/components/common_components/custom_appbar.dart';
+import 'package:consumer_app/src/view/components/common_components/custom_drawer.dart';
 import 'package:consumer_app/src/view/components/common_components/title_text.dart';
 import 'package:consumer_app/src/view/components/dashboard_components/expense_chart.dart';
 import 'package:consumer_app/src/view/components/dashboard_components/overview_card.dart';
@@ -21,7 +22,8 @@ class DashboardScreen extends StatelessWidget {
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: CustomAppbar(title: "Dashboard", isnotify: true),
+      drawer: const CustomDrawer(),
+      appBar: CustomAppbar(title: "Dashboard", isnotify: true, hasDrawer: true),
       // appBar: AppBar(
       //   backgroundColor: theme.appBarTheme.backgroundColor,
       //   title: Text("Dashboard", style: theme.textTheme.titleMedium?.copyWith(color: theme.appBarTheme.foregroundColor, fontWeight: FontWeight.bold)),

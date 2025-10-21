@@ -56,6 +56,8 @@ dependencies:
   iconsax: ^0.0.8
   flutter_local_notifications: ^19.4.2
   timezone: ^0.10.1
+  shared_preferences: ^2.5.3
+  lucide_icons: ^0.257.0
 
 dev_dependencies:
   flutter_test:

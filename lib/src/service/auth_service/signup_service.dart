@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:consumer_app/src/core/constants/app_colors.dart';
+import 'package:consumer_app/src/core/utils/device_helper.dart';
 import 'package:consumer_app/src/model/auth_model/signup_model.dart';
 import 'package:consumer_app/src/core/constants/api_url.dart';
 import 'package:consumer_app/src/service/common_service/api_service.dart';
@@ -30,6 +31,8 @@ class SignupService {
     String cnic,
   ) async {
     try {
+      String deviceId = await DeviceIdHelper.getDeviceId();
+      log("Device ID: $deviceId");
       Uint8List encoded = encodeUtf16Le(password);
       var sendPassword = sha256.convert(encoded);
       var bodySent = {
@@ -38,6 +41,7 @@ class SignupService {
         "password": sendPassword.toString(),
         "phoneNumber": phoneNumber,
         "cnicNumber": cnic,
+        "deviceId": deviceId,
       };
       final response = await APIService.signup(
         api: ApiUrl.signupUrl,
