@@ -1,5 +1,6 @@
 import 'package:consumer_app/src/core/constants/app_colors.dart';
 import 'package:consumer_app/src/routes/route_names.dart';
+import 'package:consumer_app/src/service/storage_service/storage_services.dart';
 import 'package:consumer_app/src/view/components/common_components/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -11,6 +12,7 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final StorageServices _storageService = StorageServices();
     final theme = Theme.of(context);
     return Drawer(
       width: 70.w,
@@ -27,34 +29,23 @@ class CustomDrawer extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TitleText(
-                        title: "Tony Stark",
-                        fontSize: 20.sp,
-                        color: theme.appBarTheme.foregroundColor,
+                      FutureBuilder<String?>(
+                        future: _storageService.read("user_name"),
+                        builder: (context, snapshot) {
+                          final name = snapshot.data ?? '';
+                          return TitleText(
+                            title: name,
+                            fontSize: 20.sp,
+                            color: theme.appBarTheme.foregroundColor,
+                          );
+                        },
                       ),
                     ],
                   ),
                 ],
               ),
               SizedBox(height: 4.h),
-              // _drawerItem(
-              //   LucideIcons.home,
-              //   color: theme.appBarTheme.foregroundColor!,
-              //   "Home",
-              //   () {
-              //     Get.back();
-              //     Get.offAllNamed("/home");
-              //   },
-              // ),
-              // _drawerItem(
-              //   LucideIcons.fileText,
-              //   color: theme.appBarTheme.foregroundColor!,
-              //   "Bills",
-              //   () {
-              //     Get.back();
-              //     Get.toNamed("/bills");
-              //   },
-              // ),
+
               _drawerItem(
                 LucideIcons.bellRing,
                 color: theme.appBarTheme.foregroundColor!,
