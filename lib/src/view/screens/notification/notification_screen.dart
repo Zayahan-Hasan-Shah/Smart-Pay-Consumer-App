@@ -21,13 +21,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.all(2.h),
-        child: Obx(() {
-          return ListView.builder(
-            itemBuilder: (context, index) {
-              return Text('data');
-            },
-          );
-        }),
+        child: ListView.builder(
+          itemCount: 10,
+          itemBuilder: (context, index) {
+            return ListTile(title: Text('Notification #$index'));
+          },
+        ),
       ),
     );
   }

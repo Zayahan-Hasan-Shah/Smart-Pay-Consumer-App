@@ -44,6 +44,14 @@ class SettingScreen extends StatelessWidget {
                     Get.toNamed(RouteNames.notificationScreen);
                   },
                 ),
+                _settingTile(
+                  icon: Icons.notifications,
+                  title: "Reminders",
+                  subtitle: "Check your reminders",
+                  onTap: () {
+                    Get.toNamed(RouteNames.reminderScreen);
+                  },
+                ),
 
                 // 🔥 Dark Mode Switch
                 Obx(
