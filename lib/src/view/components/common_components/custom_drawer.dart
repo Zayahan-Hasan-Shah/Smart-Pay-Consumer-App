@@ -62,13 +62,13 @@ class CustomDrawer extends StatelessWidget {
                 "Profile",
                 () {
                   Get.back();
-                  Get.toNamed("/profile");
+                  Get.toNamed(RouteNames.profileScreen);
                 },
               ),
               const Divider(color: Colors.white30),
               _drawerItem(LucideIcons.logOut, "Logout", () {
                 Get.back();
-                Get.offAllNamed("/login");
+                Get.offAllNamed(RouteNames.loginScreen);
               }, color: Colors.redAccent),
             ],
           ),

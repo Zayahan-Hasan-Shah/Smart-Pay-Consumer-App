@@ -36,7 +36,7 @@ class LoginService {
         "password": sendPassword.toString(),
         "deviceId": deviceId,
       };
-
+      log("Request body : $bodySent");
       var response = await APIService.login(
         api: ApiUrl.loginUrl,
         body: bodySent,
