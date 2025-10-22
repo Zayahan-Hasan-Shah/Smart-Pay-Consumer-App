@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:consumer_app/src/core/constants/api_url.dart';
+import 'package:consumer_app/src/core/utils/device_helper.dart';
 import 'package:consumer_app/src/model/user_model/user_model.dart';
 import 'package:consumer_app/src/service/common_service/api_service.dart';
 import 'package:crypto/crypto.dart';
@@ -24,11 +25,17 @@ class LoginService {
   }
 
   Future<UserModel?> login(String email, String password) async {
-    try { 
+    try {
+      String deviceId = await DeviceIdHelper.getDeviceId();
+      log("Device ID: $deviceId");
       Uint8List encoded = encodeUtf16Le(password);
       log("UTL16 ENCODED PASSWORD IS : $encoded");
       var sendPassword = sha256.convert(encoded);
-      var bodySent = {"email": email, "password": sendPassword.toString()};
+      var bodySent = {
+        "email": email,
+        "password": sendPassword.toString(),
+        "deviceId": deviceId,
+      };
 
       var response = await APIService.login(
         api: ApiUrl.loginUrl,
