@@ -27,7 +27,7 @@ class BillService {
             billId: item['billId'].toString(),
             billName: item['billName'] ?? 'N/A',
             amount: (item['amount'] as num?)?.toDouble() ?? 0.0,
-            issueDate: DateTime.parse(item['issueDate']),
+            // issueDate: DateTime.parse(item['issueDate']),
             dueDate: DateTime.parse(item['dueDate']),
             expiryDate: DateTime.parse(item['expiryDate']),
             isPaid: item['isPaid'] ?? false,

@@ -237,7 +237,7 @@ class _BillScreenState extends State<BillScreen> {
             ),
             SizedBox(height: 2.h),
             _buildFilterOption("Due Date", BillFilterType.dueDate),
-            _buildFilterOption("Issue Date", BillFilterType.issueDate),
+            // _buildFilterOption("Issue Date", BillFilterType.issueDate),
             _buildFilterOption("Paid Bills", BillFilterType.paid),
             _buildFilterOption("Unpaid Bills", BillFilterType.unpaid),
             _buildFilterOption("Reminder Bills", BillFilterType.reminder),

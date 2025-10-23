@@ -3,7 +3,7 @@ import 'package:consumer_app/src/model/bill_model/bill_model.dart';
 import 'package:consumer_app/src/service/bill_service/bill_service.dart';
 import 'package:get/get.dart';
 
-enum BillFilterType { dueDate, issueDate, paid, unpaid, reminder }
+enum BillFilterType { dueDate, paid, unpaid, reminder }
 
 class BillController extends GetxController {
   var isLoading = false.obs;
@@ -86,9 +86,6 @@ class BillController extends GetxController {
           break;
         case BillFilterType.dueDate:
           result.sort((a, b) => a.dueDate.compareTo(b.dueDate));
-          break;
-        case BillFilterType.issueDate:
-          result.sort((a, b) => a.issueDate.compareTo(b.issueDate));
           break;
         case BillFilterType.reminder:
           final reminderControllers = ReminderController.allControllers;

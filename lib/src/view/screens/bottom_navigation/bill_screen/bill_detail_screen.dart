@@ -317,7 +317,8 @@ class BillDetailScreen extends StatelessWidget {
 
             _buildRow(
               bill.amount,
-              bill.issueDate,
+              '',
+              // bill.issueDate,
               fontSize1: 18.sp,
               fontSize2: 18.sp,
               isAmount: true,

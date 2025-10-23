@@ -17,9 +17,10 @@ class LoginController extends GetxController {
       isLoading.value = true;
       UserModel? response = await LoginService().login(email, password);
       if (response != null) {
+        await _storage.write('device_id', response.deviceId);
+        await _storage.write('user_id', response.userId.toString());
         currentUser.value = response;
         isLoading.value = false;
-        isLoading.value=true;
         return response;
       }
       isLoading.value = false;
