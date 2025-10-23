@@ -11,6 +11,7 @@ class UserModel {
   String phoneNumber;
   String deviceId;
   bool deviceChanged;
+  bool isActive;
 
   UserModel({
     required this.userId,
@@ -19,6 +20,7 @@ class UserModel {
     required this.phoneNumber,
     required this.deviceId,
     required this.deviceChanged,
+    required this.isActive,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -27,7 +29,8 @@ class UserModel {
     email: json["email"],
     phoneNumber: json["phoneNumber"],
     deviceId: json["deviceId"],
-    deviceChanged: json["deviceChanged"]
+    deviceChanged: json["deviceChanged"],
+    isActive: json["isActive"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -36,6 +39,7 @@ class UserModel {
     "email": email,
     "phoneNumber": phoneNumber,
     "deviceId": deviceId,
-    "deviceChanged": deviceChanged
+    "deviceChanged": deviceChanged,
+    "isActive": isActive,
   };
 }
