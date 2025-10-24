@@ -86,7 +86,7 @@ class APIService {
       if (response.statusCode == 200) {
         log("*** response ***");
         log("URI : $api");
-
+        log("STATUS CODE : ${response.statusCode}");
         log("BODY : ${response.body}");
 
         return response.body;

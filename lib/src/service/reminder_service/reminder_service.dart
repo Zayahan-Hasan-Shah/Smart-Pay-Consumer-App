@@ -30,6 +30,33 @@ class ReminderService {
       expiryDate: DateTime(2025, 10, 27),
       isPaid: false,
     ),
+    BillModel(
+      billId: 'BILL004',
+      billName: 'MANAGEMENT Bill',
+      amount: 54626.75,
+      // issueDate: DateTime(2025, 10, 1),
+      dueDate: DateTime(2025, 11, 25),
+      expiryDate: DateTime(2025, 11, 30),
+      isPaid: false,
+    ),
+    BillModel(
+      billId: 'BILL005',
+      billName: 'BIKE INS Bill',
+      amount: 54286.75,
+      // issueDate: DateTime(2025, 10, 1),
+      dueDate: DateTime(2025, 11, 20),
+      expiryDate: DateTime(2025, 11, 30),
+      isPaid: false,
+    ),
+    BillModel(
+      billId: 'BILL006',
+      billName: 'MOBILE Bill',
+      amount: 3121325.75,
+      // issueDate: DateTime(2025, 10, 1),
+      dueDate: DateTime(2025, 12, 25),
+      expiryDate: DateTime(2025, 12, 30),
+      isPaid: false,
+    ),
   ];
 
   /// Simulate fetching reminders from API

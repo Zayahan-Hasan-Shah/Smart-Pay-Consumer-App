@@ -10,35 +10,58 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
 import 'src/controller/theme_controller/theme_controller.dart';
+import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 Future<void> _initNotifications() async {
+  // Initialize timezone data
   tz.initializeTimeZones();
 
+  try {
+    // Dynamically detect timezone offset and correct Etc/GMT logic
+    final now = DateTime.now();
+    final offset = now.timeZoneOffset;
+
+    // Note: Etc/GMT sign is reversed by convention!
+    final offsetHours = offset.inHours;
+    final gmtOffset = offsetHours == 0
+        ? 'Etc/GMT'
+        : 'Etc/GMT${offsetHours > 0 ? '-' : '+'}${offsetHours.abs()}';
+
+    // Set local timezone
+    tz.setLocalLocation(tz.getLocation(gmtOffset));
+    debugPrint('🕓 Timezone successfully set to: ${tz.local.name}');
+  } catch (e) {
+    debugPrint('⚠️ Failed to detect local timezone, defaulting to UTC: $e');
+    tz.setLocalLocation(tz.getLocation('UTC'));
+  }
+
+  // Android initialization
   const AndroidInitializationSettings androidInit =
       AndroidInitializationSettings('@mipmap/ic_launcher');
 
+  // iOS initialization
   const DarwinInitializationSettings iosInit = DarwinInitializationSettings(
     requestAlertPermission: true,
     requestBadgePermission: true,
     requestSoundPermission: true,
   );
 
+  // Combine initialization settings
   const InitializationSettings initSettings = InitializationSettings(
     android: androidInit,
     iOS: iosInit,
   );
 
-  // Initialize with onDidReceiveNotificationResponse callback
+  // Initialize plugin with callback
   await flutterLocalNotificationsPlugin.initialize(
     initSettings,
     onDidReceiveNotificationResponse: (NotificationResponse response) {
       if (response.payload != null) {
         final payloadData = jsonDecode(response.payload!);
-        // Handle notification tap - navigate to bill details or relevant screen
         Get.toNamed(
           RouteNames.billDetailScreen,
           arguments: {'billId': payloadData['billId']},
@@ -47,38 +70,26 @@ Future<void> _initNotifications() async {
     },
   );
 
+  // Request permissions (Android 13+ & iOS)
   await Permission.notification.request();
   await Permission.scheduleExactAlarm.request();
+
+  // Create notification channel for Android
+  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'bill_reminder_channel',
+    'Bill Reminders',
+    description: 'Bill due date reminders',
+    importance: Importance.high,
+  );
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin
+      >()
+      ?.createNotificationChannel(channel);
+
+  debugPrint('✅ Notifications initialized in timezone: ${tz.local.name}');
 }
-
-// Future<void> _initNotifications() async {
-//   // Initialize time zones
-//   tz.initializeTimeZones();
-
-//   // Android settings
-//   const AndroidInitializationSettings androidInit =
-//       AndroidInitializationSettings('@mipmap/ic_launcher');
-
-//   // iOS settings (optional)
-//   const DarwinInitializationSettings iosInit = DarwinInitializationSettings();
-
-//   const InitializationSettings initSettings = InitializationSettings(
-//     android: androidInit,
-//     iOS: iosInit,
-//   );
-
-//   // Initialize plugin
-//   await flutterLocalNotificationsPlugin.initialize(initSettings);
-
-//   // Request permissions (especially for Android 13+)
-//   // await flutterLocalNotificationsPlugin
-//   //     .resolvePlatformSpecificImplementation<
-//   //       AndroidFlutterLocalNotificationsPlugin
-//   //     >()
-//   //     ?.requestNotificationsPermission();
-//   await Permission.notification.request();
-//   await Permission.scheduleExactAlarm.request();
-// }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
