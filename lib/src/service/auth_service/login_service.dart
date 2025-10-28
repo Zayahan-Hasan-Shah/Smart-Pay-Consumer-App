@@ -5,6 +5,7 @@ import 'package:consumer_app/src/core/constants/api_url.dart';
 import 'package:consumer_app/src/core/utils/device_helper.dart';
 import 'package:consumer_app/src/model/user_model/user_model.dart';
 import 'package:consumer_app/src/service/common_service/api_service.dart';
+import 'package:consumer_app/src/service/storage_service/storage_services.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,13 @@ class LoginService {
       );
 
       if (response != null) {
+        final storage = StorageServices();
+        final Map<String, dynamic> decoded = json.decode(response);
+        final userJson = decoded["user"];
+        final tokenJson = decoded["token"];
+        await storage.write("access_token", tokenJson["accessToken"]);
+        await storage.write("refresh_token", tokenJson["refreshToken"]);
+        await storage.write("expires_in", tokenJson["expiresIn"].toString());
         Get.snackbar(
           "Login Successfully",
           "Welcome",
@@ -50,8 +58,8 @@ class LoginService {
           backgroundColor: Colors.green,
           snackPosition: SnackPosition.BOTTOM,
         );
-        final parsedList = userModelFromJson(response);
-        return parsedList;
+        final parsedUser = UserModel.fromJson(userJson);
+        return parsedUser;
       }
       Get.snackbar(
         "Login Error",

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:consumer_app/src/model/user_model/user_model.dart';
 import 'package:consumer_app/src/service/auth_service/login_service.dart';
 import 'package:consumer_app/src/service/storage_service/storage_services.dart';
@@ -16,6 +18,7 @@ class LoginController extends GetxController {
       final StorageServices _storage = StorageServices();
       isLoading.value = true;
       UserModel? response = await LoginService().login(email, password);
+      log("FUCKIN RESPONSE : ${response?.cnicNumber}");
       if (response != null) {
         await _storage.write('device_id', response.deviceId);
         await _storage.write('user_id', response.userId.toString());
