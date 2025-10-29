@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:consumer_app/src/core/constants/app_theme.dart';
 import 'package:consumer_app/src/routes/app_routes.dart';
 import 'package:consumer_app/src/routes/route_names.dart';
+import 'package:consumer_app/src/service/network_service/network_manager.dart';
 import 'package:consumer_app/src/service/session_service/session_manager.dart';
 import 'package:consumer_app/src/service/token_service/token_manager.dart';
 import 'package:consumer_app/src/view/screens/on_boarding/splash_screen.dart';
@@ -96,6 +97,7 @@ Future<void> _initNotifications() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _initNotifications();
+  Get.put(NetworkManager(), permanent: true);
   final tokenManager = TokenManager();
   await tokenManager.initialize();
   runApp(const MyApp());

@@ -58,6 +58,7 @@ dependencies:
   timezone: ^0.10.1
   shared_preferences: ^2.5.3
   lucide_icons: ^0.257.0
+  connectivity_plus: ^7.0.0
 
 dev_dependencies:
   flutter_test:
