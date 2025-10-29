@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:consumer_app/src/core/constants/api_url.dart';
 import 'package:consumer_app/src/routes/route_names.dart';
 import 'package:consumer_app/src/service/common_service/api_service.dart';
+import 'package:consumer_app/src/service/storage_service/storage_services.dart';
 import 'package:consumer_app/src/service/token_service/token_manager.dart';
 import 'package:get/get.dart';
 
@@ -34,10 +36,15 @@ class SessionManager {
 
   Future<void> _handleInactivityLogout() async {
     log("User inactive for 2 minutes — logging out...");
+    final StorageServices _service = StorageServices();
+    var refreshToken = await _service.read("refresh_token");
 
     try {
+      final Map<String, dynamic> bodySent = {
+        "refreshToken": refreshToken
+      };
       // Call logout API if needed
-      await APIService.post(api: ApiUrl.logoutUrl);
+      await APIService.post(api: ApiUrl.logoutUrl, body: bodySent);
 
       // Clear all stored tokens
       await TokenManager().clearTokens();
