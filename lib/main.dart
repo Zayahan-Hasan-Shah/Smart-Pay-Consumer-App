@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:consumer_app/src/core/constants/app_theme.dart';
 import 'package:consumer_app/src/routes/app_routes.dart';
 import 'package:consumer_app/src/routes/route_names.dart';
+import 'package:consumer_app/src/service/session_service/session_manager.dart';
+import 'package:consumer_app/src/service/token_service/token_manager.dart';
 import 'package:consumer_app/src/view/screens/on_boarding/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -94,6 +96,8 @@ Future<void> _initNotifications() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _initNotifications();
+  final tokenManager = TokenManager();
+  await tokenManager.initialize();
   runApp(const MyApp());
 }
 
@@ -103,19 +107,27 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeController = Get.put(ThemeController());
+    final sessionManager = SessionManager();
+    sessionManager.initialize();
 
     return Sizer(
       builder: (context, orientation, deviceType) {
         return Obx(() {
-          return GetMaterialApp(
-            debugShowCheckedModeBanner: false,
-            getPages: AppRoutes.routes,
-            initialRoute: RouteNames.splashScreen,
-            title: 'Consumer App',
-            theme: lightTheme,
-            darkTheme: darkTheme,
-            themeMode: themeController.theme,
-            home: SplashScreen(),
+          return Listener(
+            behavior: HitTestBehavior.translucent,
+            onPointerDown: (_) => sessionManager.userActivityDetected(),
+            onPointerMove: (_) => sessionManager.userActivityDetected(),
+            onPointerHover: (_) => sessionManager.userActivityDetected(),
+            child: GetMaterialApp(
+              debugShowCheckedModeBanner: false,
+              getPages: AppRoutes.routes,
+              initialRoute: RouteNames.splashScreen,
+              title: 'Consumer App',
+              theme: lightTheme,
+              darkTheme: darkTheme,
+              themeMode: themeController.theme,
+              home: SplashScreen(),
+            ),
           );
         });
       },
