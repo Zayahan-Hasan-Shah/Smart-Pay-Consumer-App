@@ -7,6 +7,7 @@ import 'package:consumer_app/src/routes/route_names.dart';
 import 'package:consumer_app/src/service/common_service/api_service.dart';
 import 'package:consumer_app/src/service/storage_service/storage_services.dart';
 import 'package:consumer_app/src/service/token_service/token_manager.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SessionManager {
@@ -60,4 +61,52 @@ class SessionManager {
   void dispose() {
     _inactivityTimer?.cancel();
   }
+
+  Future<void> logout({bool showMessage = true}) async {
+  log("Manual logout initiated...");
+  _inactivityTimer?.cancel();
+
+  final StorageServices _service = StorageServices();
+  var refreshToken = await _service.read("refresh_token");
+
+  try {
+    final Map<String, dynamic> bodySent = {
+      "refreshToken": refreshToken,
+    };
+
+    // Call logout API if available
+    await APIService.post(api: ApiUrl.logoutUrl, body: bodySent);
+
+    // Clear tokens
+    await TokenManager().clearTokens();
+
+    // Navigate to login
+    Get.offAllNamed(RouteNames.loginScreen);
+
+    // Optional logout message
+    if (showMessage) {
+      Get.snackbar(
+        "Logged Out",
+        "You have been successfully logged out.",
+        colorText: Colors.white,
+        backgroundColor: Colors.redAccent,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  } catch (e) {
+    log("Error during manual logout: $e");
+    Get.offAllNamed(RouteNames.loginScreen);
+    if (showMessage) {
+      Get.snackbar(
+        "Error",
+        "Something went wrong during logout.",
+        colorText: Colors.white,
+        backgroundColor: Colors.redAccent,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+}
+
+
 }

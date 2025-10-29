@@ -1,5 +1,6 @@
 import 'package:consumer_app/src/core/constants/app_colors.dart';
 import 'package:consumer_app/src/routes/route_names.dart';
+import 'package:consumer_app/src/service/session_service/session_manager.dart';
 import 'package:consumer_app/src/service/storage_service/storage_services.dart';
 import 'package:consumer_app/src/view/components/common_components/title_text.dart';
 import 'package:flutter/material.dart';
@@ -66,9 +67,10 @@ class CustomDrawer extends StatelessWidget {
                 },
               ),
               const Divider(color: Colors.white30),
-              _drawerItem(LucideIcons.logOut, "Logout", () {
+              _drawerItem(LucideIcons.logOut, "Logout", () async {
+                final sessionManager = SessionManager();
                 Get.back();
-                Get.offAllNamed(RouteNames.loginScreen);
+                await sessionManager.logout();
               }, color: Colors.redAccent),
             ],
           ),
