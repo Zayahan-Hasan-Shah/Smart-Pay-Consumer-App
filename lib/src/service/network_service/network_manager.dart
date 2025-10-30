@@ -17,13 +17,11 @@ class NetworkManager extends GetxService {
   }
 
   void _monitorConnection() async {
-    // Initial check
-    final result = await _connectivity.checkConnectivity();
-    _updateConnectionStatus(result as ConnectivityResult);
+    final results = await _connectivity.checkConnectivity();
+    final initial = results.isNotEmpty ? results.first : ConnectivityResult.none;
+    _updateConnectionStatus(initial);
 
-    // Listen for future changes
     _subscription = _connectivity.onConnectivityChanged.listen((List<ConnectivityResult> results) {
-      // In most cases, there will be one result
       final current = results.isNotEmpty ? results.first : ConnectivityResult.none;
       _updateConnectionStatus(current);
     });
@@ -48,8 +46,9 @@ class NetworkManager extends GetxService {
   }
 
   Future<bool> checkConnection() async {
-    final result = await _connectivity.checkConnectivity();
-    final current = result.isNotEmpty ? result.first : ConnectivityResult.none;
+    final results = await _connectivity.checkConnectivity();
+    final current = results.isNotEmpty ? results.first : ConnectivityResult.none;
+
     if (current == ConnectivityResult.none) {
       _showNoInternetDialog();
       return false;
