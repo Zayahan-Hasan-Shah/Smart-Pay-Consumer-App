@@ -5,6 +5,7 @@ class RouteNames {
 
   static const splashScreen = '/splashscreen';
   static const loginScreen = '/loginscreen';
+  static const forgotPasswordScreen = '/forgotpasswordscreen';
   static const signupScreen = '/signupscreen';
   static const landingPageScreen = '/landingpagescreen';
   static const dashboardScreen = '/dashboardscreen';
