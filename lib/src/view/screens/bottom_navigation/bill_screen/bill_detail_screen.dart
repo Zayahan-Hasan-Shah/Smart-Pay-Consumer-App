@@ -341,8 +341,8 @@ class BillDetailScreen extends StatelessWidget {
             _buildRow(
               bill.dueDate,
               bill.expiryDate,
-              fontSize1: 18.sp,
-              fontSize2: 18.sp,
+              fontSize1: 16.sp,
+              fontSize2: 16.sp,
               isBothDate: true,
               color1: theme.appBarTheme.foregroundColor,
               color2: theme.appBarTheme.foregroundColor,
@@ -451,7 +451,10 @@ class BillDetailScreen extends StatelessWidget {
     // Format text
     if (isAmount) leftText = formatAmountPKR(text1);
     // if (isDate || isBothDate) rightText = formatDate(text2);
-    if (isBothDate) leftText = formatDate(text1);
+    if (isBothDate) {
+      leftText = formatDate(text1);
+      rightText = formatDate(text2);
+    }
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
