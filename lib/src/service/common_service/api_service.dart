@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:consumer_app/src/core/constants/key.dart';
 import 'package:http/http.dart' as http;
 
 import '../storage_service/storage_services.dart';
@@ -70,31 +69,34 @@ class APIService {
     return null;
   }
 
-  static Future<dynamic> get({required String api}) async {
+  static Future<String?> get({required String api}) async {
     try {
-      final token = await StorageServices().read(tokenKey);
-      Map<String, String> header = {"Content-Type": "application/json"};
-      if (token != null) {
-        header["Authorization"] = "Bearer $token";
-      }
+      final token = await StorageServices().read("access_token");
+      log("FREAKING TOKEN : $token");
+      final headers = {
+        "Content-Type": "application/json",
+        if (token != null) "Authorization": "Bearer $token",
+      };
 
-      log("*** Request ***");
+      log("*** GET Request ***");
       log("URI : $api");
 
-      final response = await http.get(Uri.parse(api), headers: header);
+      final response = await http.get(Uri.parse(api), headers: headers);
 
-      if (response.statusCode == 200) {
-        log("*** response ***");
-        log("URI : $api");
-        log("STATUS CODE : ${response.statusCode}");
-        log("BODY : ${response.body}");
+      log("*** Response ***");
+      log("Status Code : ${response.statusCode}");
+      log("Body : ${response.body}");
 
+      if (response.statusCode == 200 && response.body.isNotEmpty) {
         return response.body;
+      } else {
+        log("Empty or invalid response from $api");
+        return null;
       }
-      log("=======================");
-      log("BODY : ${response.body}");
-    } catch (e) {
-      log(e.toString());
+    } catch (e, stack) {
+      log("GET Error: $e");
+      log("Stacktrace: $stack");
+      return null;
     }
   }
 
@@ -104,7 +106,7 @@ class APIService {
     Map<String, dynamic>? body,
   }) async {
     try {
-      final token = await StorageServices().read(tokenKey);
+      final token = await StorageServices().read("access_token");
       Map<String, String> header = {"Content-Type": "application/json"};
       if (token != null) {
         header["Authorization"] = "Bearer $token";

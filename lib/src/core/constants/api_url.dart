@@ -4,7 +4,7 @@ class ApiUrl {
   static const String loginUrl = '$baseUrl/api/Auth/login';
   static const String refreshTokenUrl = '$baseUrl/api/Auth/refresh';
   static const String logoutUrl = '$baseUrl/api/Auth/logout';
-  static const String getBillsByConsumerNoUrl = '$baseUrl/api/ConsumerNumber/consumer/';
+  static const String getBillsByConsumerNoUrl = '$baseUrl/api/Bills/bill/';
   static const String registerConsumerNoUrl = '$baseUrl/api/ConsumerNumber/register';
   static const String getConsumerNoOfUser = '$baseUrl/api/ConsumerNumber/user/';
 }

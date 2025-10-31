@@ -450,7 +450,7 @@ class BillDetailScreen extends StatelessWidget {
 
     // Format text
     if (isAmount) leftText = formatAmountPKR(text1);
-    if (isDate || isBothDate) rightText = formatDate(text2);
+    // if (isDate || isBothDate) rightText = formatDate(text2);
     if (isBothDate) leftText = formatDate(text1);
 
     return Row(
