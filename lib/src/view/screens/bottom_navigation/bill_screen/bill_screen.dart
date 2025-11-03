@@ -205,7 +205,11 @@ class _BillScreenState extends State<BillScreen> {
                           RouteNames.billDetailScreen,
                           arguments: bill,
                         ),
-                        child: BillListComponent(bill: bill),
+                        child: BillListComponent(
+                          bill: bill,
+                          consumerNumberId:
+                              billController.currentConsumerNumberId!,
+                        ),
                       ),
                     );
                   },

@@ -1,43 +1,44 @@
+import 'package:consumer_app/src/controller/reminder_controller/reminder_controller.dart';
 import 'package:consumer_app/src/core/constants/app_colors.dart';
 import 'package:consumer_app/src/core/utils/global.dart';
-import 'package:consumer_app/src/controller/reminder_controller/reminder_controller.dart';
-import 'package:consumer_app/src/model/bill_model/bill_model.dart';
 import 'package:consumer_app/src/view/components/common_components/title_text.dart';
+import 'package:consumer_app/src/model/bill_model/bill_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
+
 class BillListComponent extends StatelessWidget {
   final BillModel bill;
-  late final ReminderController reminderController;
+  final int consumerNumberId;
 
-  BillListComponent({super.key, required this.bill}) {
-    reminderController = Get.put(
-      ReminderController(
-        billId: bill.billId.toString(),
-        billName: bill.billName,
-      ),
-      tag: bill.billId.toString(),
-    );
-    ReminderController.registerController(
-      bill.billId.toString(),
-      reminderController,
-    );
-  }
+  const BillListComponent({
+    super.key,
+    required this.bill,
+    required this.consumerNumberId,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    // Each bill has its own reminder controller
+    final controller = Get.put(
+      ReminderController(
+        billId: int.parse(bill.billId),
+        consumerNumberId: consumerNumberId,
+        initialStatus:
+            false, // you can set true if backend returns reminder status
+      ),
+      tag: bill.billId.toString(),
+    );
+
     return Obx(() {
-      final controller = Get.find<ReminderController>(
-        tag: bill.billId.toString(),
-      );
       return Container(
         margin: EdgeInsets.symmetric(vertical: 1.h),
         padding: EdgeInsets.all(2.h),
         decoration: BoxDecoration(
           color: AppColors.backgroundColor,
-          // color: theme.colorScheme.background,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -56,7 +57,6 @@ class BillListComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  //  allows wrapping
                   child: _buildText(
                     bill.billName,
                     fontSize: 18.sp,
@@ -92,34 +92,17 @@ class BillListComponent extends StatelessWidget {
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
               title: const TitleText(title: "Set Reminder"),
-              value: controller.isReminderOn.value,
-              onChanged: (value) =>
-                  controller.toggleReminder(context, value, bill.dueDate),
+              value: controller.isReminderEnabled.value,
+              onChanged: (_) => controller.toggleReminder(),
               secondary: Icon(Icons.alarm, color: AppColors.info),
             ),
-
-            // ===== Show reminder date (if any) =====
-            if (controller.reminderDate.value != null)
-              Padding(
-                padding: EdgeInsets.only(left: 1.h, top: 0.5.h),
-
-                child: TitleText(
-                  title:
-                      "Reminder: ${formatDate(controller.reminderDate.value!)}",
-                  fontSize: 18.sp,
-                  color: AppColors.info,
-                  weight: FontWeight.bold,
-                ),
-                // child: Text(
-                //   "Reminder: ${formatDate(controller.reminderDate.value!)}",
-                //   style: TextStyle(color: AppColors.info, fontSize: 14.sp),
-                // ),
-              ),
           ],
         ),
       );
     });
   }
+
+  // ================= Helper Widgets =================
 
   Widget _buildText(
     String title, {
@@ -127,7 +110,6 @@ class BillListComponent extends StatelessWidget {
     Color? color,
     FontWeight? weight,
   }) {
-    // Check if bill name length is greater than 12 → allow 2 lines
     final bool shouldWrap = title.length > 12;
 
     return TitleText(
@@ -135,10 +117,8 @@ class BillListComponent extends StatelessWidget {
       fontSize: fontSize ?? 16.sp,
       color: color ?? Colors.black,
       weight: weight ?? FontWeight.normal,
-      maxLines: shouldWrap ? 2 : 1, // ✅ two lines if length > 12
-      overflow: shouldWrap
-          ? TextOverflow.ellipsis
-          : TextOverflow.visible, // ✅ let it wrap instead of cutting
+      maxLines: shouldWrap ? 2 : 1,
+      overflow: shouldWrap ? TextOverflow.ellipsis : TextOverflow.visible,
     );
   }
 
@@ -150,7 +130,7 @@ class BillListComponent extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: _buildText(
-        isPaid ? "Paid" : "UnPaid",
+        isPaid ? "Paid" : "Unpaid",
         color: AppColors.backgroundColor,
         fontSize: 12.sp,
         weight: FontWeight.w600,

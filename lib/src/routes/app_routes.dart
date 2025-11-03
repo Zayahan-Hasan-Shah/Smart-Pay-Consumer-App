@@ -30,6 +30,6 @@ class AppRoutes {
     GetPage(name: RouteNames.profileScreen, page: () => const ProfileScreen()),
     GetPage(name: RouteNames.settingScreen, page: () => const SettingScreen()),
     GetPage(name: RouteNames.notificationScreen, page: () => const NotificationScreen()),
-    GetPage(name: RouteNames.reminderScreen, page: () => const ReminderScreen()),
+    // GetPage(name: RouteNames.reminderScreen, page: () => const ReminderScreen()),
   ];
 }

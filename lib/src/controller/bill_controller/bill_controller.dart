@@ -81,21 +81,25 @@ class BillController extends GetxController {
         case BillFilterType.paid:
           result = result.where((b) => b.isPaid).toList();
           break;
+
         case BillFilterType.unpaid:
           result = result.where((b) => !b.isPaid).toList();
           break;
+
         case BillFilterType.dueDate:
           result.sort((a, b) => a.dueDate.compareTo(b.dueDate));
           break;
+
         case BillFilterType.reminder:
+          // Filter bills that currently have reminder enabled
           final reminderControllers = ReminderController.allControllers;
           final reminderBillIds = reminderControllers
-              .where((c) => c.reminderDate.value != null)
+              .where((c) => c.isReminderEnabled.value)
               .map((c) => c.billId)
               .toList();
 
           result = result
-              .where((b) => reminderBillIds.contains(b.billId))
+              .where((b) => reminderBillIds.contains(int.parse(b.billId)))
               .toList();
           break;
       }

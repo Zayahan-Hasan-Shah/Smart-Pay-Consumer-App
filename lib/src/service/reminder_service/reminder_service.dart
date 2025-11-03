@@ -1,6 +1,61 @@
-import 'package:consumer_app/src/model/bill_model/bill_model.dart';
+import 'dart:developer';
 
-class ReminderService {
+import 'package:consumer_app/src/core/constants/api_url.dart';
+import 'package:consumer_app/src/core/constants/app_colors.dart';
+import 'package:consumer_app/src/model/bill_model/bill_model.dart';
+import 'package:consumer_app/src/service/common_service/api_service.dart';
+import 'package:consumer_app/src/service/storage_service/storage_services.dart';
+import 'package:get/get.dart';
+
+class ReminderService extends GetxController {
+  Future<String?> setReminder({
+    required int consumerNumberId,
+    required int billId,
+    required bool isEnabled,
+  }) async {
+    try {
+      final StorageServices _storage = StorageServices();
+      final String? userIdStr = await _storage.read("user_id");
+      final String? deviceId = await _storage.read("device_id");
+
+      final int userId = int.parse(userIdStr!);
+      var bodySent = {
+        "userId": userId,
+        "consumerNumberId": consumerNumberId,
+        "billId": billId,
+        "deviceId": deviceId,
+        "remindDaysBefore": 2,
+        "isEnabled": isEnabled,
+      };
+
+      var response = await APIService.post(
+        api: ApiUrl.setReminderUrl,
+        body: bodySent,
+      );
+      if (response != null) {
+        Get.snackbar(
+          "Successfull",
+          "Reminder Set Successfully",
+          colorText: AppColors.white,
+          backgroundColor: AppColors.primaryColor,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return response;
+      }
+      Get.snackbar(
+        "Failed",
+        "Failed to Set Reminder",
+        colorText: AppColors.white,
+        backgroundColor: AppColors.danger,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return null;
+    } catch (e) {
+      log("Failed to set Reminder : $e");
+      return null;
+    }
+  }
+
   // Mock in-memory data list
   final List<BillModel> _mockReminders = [
     BillModel(
